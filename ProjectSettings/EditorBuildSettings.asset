@@ -4,5 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/DropDown.unity
+    guid: 1879e565a8c7c5c42a912502d21ea875
+  - enabled: 1
+    path: Assets/Scenes/K-City.unity
+    guid: aef99d791c860654b8666aa8da2e9327
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Green.unity
+    guid: 8a619a20b7866d945bc5f116a6049a9e
   m_configObjects: {}
