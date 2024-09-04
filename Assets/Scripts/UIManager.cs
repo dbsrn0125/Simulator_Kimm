@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        PopulateDropdown();
+        UpdateDropdown();
         SceneManager.activeSceneChanged += OnSceneChanged;
     }
 
@@ -24,7 +24,7 @@ public class UIManager : MonoBehaviour
         string currentMap = newScene.name;
         print(currentMap);
     }
-    void PopulateDropdown()
+    void UpdateDropdown()
     {
         mapDropdown.ClearOptions();
         mapPaths.Clear();
