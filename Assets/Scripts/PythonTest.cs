@@ -10,6 +10,11 @@ public class PythonTest : MonoBehaviour
 {
     private void Awake()
     {
+        
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
         PythonRunner.EnsureInitialized();
         using (Py.GIL())
         {
@@ -26,11 +31,6 @@ public class PythonTest : MonoBehaviour
                 Debug.LogException(e);
             }
         }
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
