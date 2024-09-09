@@ -12,14 +12,15 @@ public class InputDeviceController : MonoBehaviour
     public float steeringInput =0f;
     public float throttleInput=0f;
     public float brakeInput=0f;
+    public float gearInput = 0f;
 
     private float targetSteeringInput = 0f; // 목표 스티어링 입력
     private float targetThrottleInput = 0f; // 목표 가속 입력
     private float targetBrakeInput = 0f; // 목표 브레이크 입력
 
     public float steeringSpeed = 5f; // 조작 변화 속도
-    public float throttleSpeed = 2f; // 가속 변화 속도
-    public float brakeSpeed = 2f; // 브레이크 변화 속도
+    public float throttleSpeed = 5f; // 가속 변화 속도
+    public float brakeSpeed = 5f; // 브레이크 변화 속도
     private void Awake()
     {
         carInputActions = new CarInputActions();
@@ -104,8 +105,8 @@ public class InputDeviceController : MonoBehaviour
             }
         }
         // Gear Input: 전진 및 후진 확인
-        bool isGearForward = isGamepadConnected ? carInputActions.Car.GearForward.triggered : Keyboard.current.leftCtrlKey.wasPressedThisFrame;
-        bool isGearReverse = isGamepadConnected ? carInputActions.Car.GearReverse.triggered : Keyboard.current.leftShiftKey.wasPressedThisFrame;
+        bool isGearForward = isGamepadConnected ? carInputActions.Car.GearForward.triggered : Keyboard.current.leftShiftKey.wasPressedThisFrame;
+        bool isGearReverse = isGamepadConnected ? carInputActions.Car.GearReverse.triggered : Keyboard.current.leftCtrlKey.wasPressedThisFrame;
 
         //Debug.Log($"Steering Input: {steeringInput}");
         //Debug.Log($"Throttle Input: {throttleInput}");
@@ -113,11 +114,13 @@ public class InputDeviceController : MonoBehaviour
         if (isGearForward && currentGear != Gear.Forward)
         {
             currentGear = Gear.Forward;
+            gearInput = 0;
             Debug.Log("Gear Shifted to Forward");
         }
         else if (isGearReverse && currentGear != Gear.Reverse)
         {
             currentGear = Gear.Reverse;
+            gearInput = 1;
             Debug.Log("Gear Shifted to Reverse");
         }
     }

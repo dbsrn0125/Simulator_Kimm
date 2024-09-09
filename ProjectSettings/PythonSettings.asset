@@ -5,7 +5,8 @@
         "m_Name": "",
         "m_EditorClassIdentifier": "Unity.Scripting.Python.Editor:UnityEditor.Scripting.Python:PythonSettings",
         "m_sitePackages": [
-            "Assets/site-packages"
+            "Assets/site-packages",
+            "Library\\PythonInstall\\Lib\\site-packages"
         ]
     }
 }
