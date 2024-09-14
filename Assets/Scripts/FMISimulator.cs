@@ -9,6 +9,7 @@ using System.Diagnostics;
 public class FMISimulator : MonoBehaviour
 {
     dynamic FMI;
+    public float realCurrentTIme = 0f;
     InputDeviceController device;
     Dictionary<string, int> vrs;
     List<int> get_key = new List<int>();
@@ -70,8 +71,13 @@ public class FMISimulator : MonoBehaviour
 
     bool initialize_executed = true;
     public List<double> simulationResult = new List<double>();
+
     TimeSpan loop_start;
     Stopwatch sw;
+    private void Awake()
+    {
+ 
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -82,9 +88,13 @@ public class FMISimulator : MonoBehaviour
         PythonRunner.EnsureInitialized();
         using(Py.GIL())
         {
+            if (FMI)
+            {
+                FMI.simulate_free();
+            }
             dynamic FMI_py = Py.Import("custom_input_test");
             FMI = FMI_py.FMI_manager(Environment.CurrentDirectory + "\\Assets\\" + "\\fmu\\" + "KIMM_CAR.fmu");
-            vrs = FMI.get_vrs();
+            vrs = FMI.get_vrs();          
         }
         #region variables
 
@@ -223,11 +233,11 @@ public class FMISimulator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        loop_start = sw.Elapsed;
+        //realCurrentTIme += Time.deltaTime;
         if(initialize_executed)
         {
             Simulation_Do_Step();
-            while ((sw.Elapsed - loop_start).TotalMilliseconds < 0.001) { }
+            //while ((sw.Elapsed - loop_start).TotalMilliseconds < 0.001) { }
         }
         
     }
@@ -363,6 +373,10 @@ public class FMISimulator : MonoBehaviour
     }
     private void OnApplicationQuit()
     {
-        FMI.simulate_free();
+        using(Py.GIL())
+        {
+            FMI.simulate_free();
+            Simulation_Initial_Set();
+        }
     }
 }

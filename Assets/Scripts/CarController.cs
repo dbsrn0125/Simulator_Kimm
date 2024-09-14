@@ -30,9 +30,11 @@ public class CarController : MonoBehaviour
     Quaternion parent_rotation_inv = new Quaternion(0, 0, 0, 1);
 
     public float left_steer = 0.0f, right_steer = 0.0f;
-    readonly float wheelRadius = 0.3677536f;
+    //readonly float wheelRadius = 0.3677536f;
     //float suspension_dist = 0.3677536f;
-    float suspension_dist = 0.4177536f;
+    //float suspension_dist = 0.4177536f;
+    readonly float wheelRadius = 0.3f;
+    float suspension_dist = 0.3f;
 
     public float value_yaw = 0.0f, value_x = 0.0f, value_x_old = 0.0f, value_y = 0.0f, value_y_old = 0.0f, cur_time = 0;
     public float value_roll = 0.0f, value_pitch = 0.0f;
@@ -61,7 +63,7 @@ public class CarController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         transform.position = new Vector3(transform.position.x, value_z + suspension_dist, transform.position.z);
         transform.rotation = Quaternion.Euler(value_pitch, -value_yaw_old, -value_roll);
@@ -76,7 +78,7 @@ public class CarController : MonoBehaviour
 
             if (t.name == "FrontLeftWheel")
             {
-                Debug.Log("FrontLeftWheel");
+                //Debug.Log("FrontLeftWheel");
                 t.localRotation = Quaternion.Euler(new Vector3(0, -left_steer + 180, 0));
                 RaycastHit[] wheelHits_f = Physics.RaycastAll(t.position + t.forward * 0.1f, -transform.up, wheelRadius + 10.0f, layer_mask);
                 RaycastHit[] wheelHits_l = Physics.RaycastAll(t.position - t.right * 0.1f, -transform.up, wheelRadius + 10.0f, layer_mask);
@@ -154,36 +156,6 @@ public class CarController : MonoBehaviour
                 t.localPosition = new Vector3(t.localPosition.x, suspension_dist - list_wheel_z[3], t.localPosition.z);
             }
         }
-        rayInfo.Add(list_wheel_ray[0]);
-        rayInfo.Add(list_wheel_ray[1]);
-        rayInfo.Add(list_wheel_ray[2]);
-        rayInfo.Add(list_wheel_ray[3]);
-        rayInfo.Add(forward_FL.z);
-        rayInfo.Add(-forward_FL.x);
-        rayInfo.Add(forward_FL.y);
-        rayInfo.Add(forward_FR.z);
-        rayInfo.Add(-forward_FR.x);
-        rayInfo.Add(forward_FR.y);
-        rayInfo.Add(forward_RR.z);
-        rayInfo.Add(-forward_RR.x);
-        rayInfo.Add(forward_RR.y);
-        rayInfo.Add(forward_RL.z);
-        rayInfo.Add(-forward_RL.x);
-        rayInfo.Add(forward_RL.y);
-        rayInfo.Add(left_FL.z);
-        rayInfo.Add(-left_FL.x);
-        rayInfo.Add(left_FL.y);
-        rayInfo.Add(left_FR.z);
-        rayInfo.Add(-left_FR.x);
-        rayInfo.Add(left_FR.y);
-        rayInfo.Add(left_RR.z);
-        rayInfo.Add(-left_RR.x);
-        rayInfo.Add(left_RR.y);
-        rayInfo.Add(left_RL.z);
-        rayInfo.Add(-left_RL.x);
-        rayInfo.Add(left_RL.y);
-        transform.GetComponent<FMISimulator>().receiveRayInfo(rayInfo);
-        rayInfo.Clear();
     }
     private Vector3 Rotate(Quaternion q, Vector3 v)
     {
@@ -218,5 +190,36 @@ public class CarController : MonoBehaviour
         list_wheel_roll[3] = (float)simulationResult[18];
         body_fixed_vx = (float)simulationResult[19];
         body_fixed_vy = (float)simulationResult[20];
+
+        rayInfo.Add(list_wheel_ray[0]);
+        rayInfo.Add(list_wheel_ray[1]);
+        rayInfo.Add(list_wheel_ray[2]);
+        rayInfo.Add(list_wheel_ray[3]);
+        rayInfo.Add(forward_FL.z);
+        rayInfo.Add(-forward_FL.x);
+        rayInfo.Add(forward_FL.y);
+        rayInfo.Add(forward_FR.z);
+        rayInfo.Add(-forward_FR.x);
+        rayInfo.Add(forward_FR.y);
+        rayInfo.Add(forward_RR.z);
+        rayInfo.Add(-forward_RR.x);
+        rayInfo.Add(forward_RR.y);
+        rayInfo.Add(forward_RL.z);
+        rayInfo.Add(-forward_RL.x);
+        rayInfo.Add(forward_RL.y);
+        rayInfo.Add(left_FL.z);
+        rayInfo.Add(-left_FL.x);
+        rayInfo.Add(left_FL.y);
+        rayInfo.Add(left_FR.z);
+        rayInfo.Add(-left_FR.x);
+        rayInfo.Add(left_FR.y);
+        rayInfo.Add(left_RR.z);
+        rayInfo.Add(-left_RR.x);
+        rayInfo.Add(left_RR.y);
+        rayInfo.Add(left_RL.z);
+        rayInfo.Add(-left_RL.x);
+        rayInfo.Add(left_RL.y);
+        transform.GetComponent<FMISimulator>().receiveRayInfo(rayInfo);
+        rayInfo.Clear();
     }
 }
