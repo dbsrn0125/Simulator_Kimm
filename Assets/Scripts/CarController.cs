@@ -33,8 +33,8 @@ public class CarController : MonoBehaviour
     //readonly float wheelRadius = 0.3677536f;
     //float suspension_dist = 0.3677536f;
     //float suspension_dist = 0.4177536f;
-    readonly float wheelRadius = 0.3f;
-    float suspension_dist = 0.3f;
+    readonly float wheelRadius = 0.3677536f;
+    float suspension_dist = 0.4177536f;
 
     public float value_yaw = 0.0f, value_x = 0.0f, value_x_old = 0.0f, value_y = 0.0f, value_y_old = 0.0f, cur_time = 0;
     public float value_roll = 0.0f, value_pitch = 0.0f;
@@ -68,7 +68,7 @@ public class CarController : MonoBehaviour
         transform.position = new Vector3(transform.position.x, value_z + suspension_dist, transform.position.z);
         transform.rotation = Quaternion.Euler(value_pitch, -value_yaw_old, -value_roll);
         transform.rotation = Quaternion.Euler(value_pitch, -value_yaw, -value_roll);
-        transform.position = new Vector3(-value_y, transform.position.y, value_x);
+        transform.position = new Vector3(-13,0.5f,-780) + new Vector3(-value_y, transform.position.y, value_x);
         value_x_old = value_x;
         value_y_old = value_y;
         value_yaw_old = value_yaw;
@@ -80,8 +80,8 @@ public class CarController : MonoBehaviour
             {
                 //Debug.Log("FrontLeftWheel");
                 t.localRotation = Quaternion.Euler(new Vector3(0, -left_steer + 180, 0));
-                RaycastHit[] wheelHits_f = Physics.RaycastAll(t.position + t.forward * 0.1f, -transform.up, wheelRadius + 10.0f, layer_mask);
-                RaycastHit[] wheelHits_l = Physics.RaycastAll(t.position - t.right * 0.1f, -transform.up, wheelRadius + 10.0f, layer_mask);
+                RaycastHit[] wheelHits_f = Physics.RaycastAll(t.position - t.forward * 0.1f, -transform.up, wheelRadius + 10.0f, layer_mask);
+                RaycastHit[] wheelHits_l = Physics.RaycastAll(t.position + t.right * 0.1f, -transform.up, wheelRadius + 10.0f, layer_mask);
                 t.localRotation = Quaternion.Euler(new Vector3(-list_wheel_roll[0], -left_steer + 180, 0));
 
                 if (wheelHits.Length > 0 && wheelHits_f.Length > 0 && wheelHits_l.Length > 0)
@@ -168,7 +168,7 @@ public class CarController : MonoBehaviour
 
     public void receiveSimulationResult(List<double> simulationResult)
     {
-        Debug.Log("receiving SimulationResult");
+        //Debug.Log("receiving SimulationResult");
         cur_time = (float)simulationResult[0];
         value_x = (float)simulationResult[1];
         value_y = (float)simulationResult[2];

@@ -9,7 +9,7 @@ using System.Diagnostics;
 public class FMISimulator : MonoBehaviour
 {
     dynamic FMI;
-    public float realCurrentTIme = 0f;
+    public float realCurrentTime = 0f;
     InputDeviceController device;
     Dictionary<string, int> vrs;
     List<int> get_key = new List<int>();
@@ -88,10 +88,10 @@ public class FMISimulator : MonoBehaviour
         PythonRunner.EnsureInitialized();
         using(Py.GIL())
         {
-            if (FMI)
-            {
-                FMI.simulate_free();
-            }
+            //if (FMI)
+            //{
+            //    FMI.simulate_free();
+            //}
             dynamic FMI_py = Py.Import("custom_input_test");
             FMI = FMI_py.FMI_manager(Environment.CurrentDirectory + "\\Assets\\" + "\\fmu\\" + "KIMM_CAR.fmu");
             vrs = FMI.get_vrs();          
@@ -231,9 +231,10 @@ public class FMISimulator : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        //realCurrentTIme += Time.deltaTime;
+        //UnityEngine.Debug.Log(Time.deltaTime);
+        realCurrentTime += Time.deltaTime;
         if(initialize_executed)
         {
             Simulation_Do_Step();
@@ -254,7 +255,7 @@ public class FMISimulator : MonoBehaviour
     
     private void Simulation_Do_Step()
     {
-        UnityEngine.Debug.Log($"throttle:{device.throttleInput}, brake:{device.brakeInput}, gear:{device.gearInput}, steer: {device.steeringInput}");
+        //UnityEngine.Debug.Log($"throttle:{device.throttleInput}, brake:{device.brakeInput}, gear:{device.gearInput}, steer: {device.steeringInput}");
         Dictionary<int, double> Dic_set = new Dictionary<int, double>();
         Dic_set.Add(vr_Accel, device.throttleInput);
         Dic_set.Add(vr_brake, device.brakeInput);
@@ -303,7 +304,7 @@ public class FMISimulator : MonoBehaviour
             //    return 
             // cur_time => clock 라이브러리
             // time_interval = cur_time - prev_time
-            get_value = FMI.simulate_step(0.001, set_key, set_value, get_key);
+            get_value = FMI.simulate_step(0.005, set_key, set_value, get_key);
             // prev_time = cur_time
         }
         simulationResult.Add((double)FMI.current_time);
