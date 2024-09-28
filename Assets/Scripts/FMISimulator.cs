@@ -11,51 +11,11 @@ public class FMISimulator : MonoBehaviour
     dynamic FMI;
     public float realCurrentTime = 0f;
     InputDeviceController device;
-    Dictionary<string, int> vrs;
+    List<int> set_key;
+    List<float> set_value;
     List<int> get_key = new List<int>();
-    List<double> get_value;
-    int vr_Vx;
-    int vr_roll;
-    int vr_pitch;
-    int vr_yaw;
-
-    int vr_Accel;
-    int vr_brake;
-    int vr_gear;
-    int vr_steer;
-
-    int vr_ray_FL;
-    int vr_ray_FR;
-    int vr_ray_RR;
-    int vr_ray_RL;
-
-    int vr_forward_x_FL;
-    int vr_forward_y_FL;
-    int vr_forward_z_FL;
-    int vr_left_x_FL;
-    int vr_left_y_FL;
-    int vr_left_z_FL;
-
-    int vr_forward_x_FR;
-    int vr_forward_y_FR;
-    int vr_forward_z_FR;
-    int vr_left_x_FR;
-    int vr_left_y_FR;
-    int vr_left_z_FR;
-
-    int vr_forward_x_RR;
-    int vr_forward_y_RR;
-    int vr_forward_z_RR;
-    int vr_left_x_RR;
-    int vr_left_y_RR;
-    int vr_left_z_RR;
-
-    int vr_forward_x_RL;
-    int vr_forward_y_RL;
-    int vr_forward_z_RL;
-    int vr_left_x_RL;
-    int vr_left_y_RL;
-    int vr_left_z_RL;
+    List<double> get_value; // Python: Float => C#: double / 64비트
+    List<float> simulationResult;
 
     float ray_FL = 1.0f, ray_FR = 1.0f, ray_RL = 1.0f, ray_RR = 1.0f;
 
@@ -70,13 +30,12 @@ public class FMISimulator : MonoBehaviour
     float[] left_RL = new float[3] { 0.0f, 1.0f, 0.0f };
 
     bool initialize_executed = true;
-    public List<double> simulationResult = new List<double>();
-
+   
     TimeSpan loop_start;
     Stopwatch sw;
     private void Awake()
     {
- 
+
     }
     // Start is called before the first frame update
     void Start()
@@ -84,253 +43,209 @@ public class FMISimulator : MonoBehaviour
         //Debug.Log(Environment.CurrentDirectory);
         device = transform.GetComponent<InputDeviceController>();
         sw = new Stopwatch();
-        sw.Start();
+        
+        Dictionary<string, int> vrs;
+
         PythonRunner.EnsureInitialized();
-        using(Py.GIL())
+        using (Py.GIL())
         {
-            //if (FMI)
-            //{
-            //    FMI.simulate_free();
-            //}
             dynamic FMI_py = Py.Import("custom_input_test");
             FMI = FMI_py.FMI_manager(Environment.CurrentDirectory + "\\Assets\\" + "\\fmu\\" + "KIMM_CAR.fmu");
-            vrs = FMI.get_vrs();          
+            vrs = FMI.get_vrs();
         }
         #region variables
 
-        var vr_x = vrs["body_Model.x"];
-        var vr_y = vrs["body_Model.y"];
-        var vr_z = vrs["body_Model.z"];
+        int vr_x = vrs["body_Model.x"];
+        int vr_y = vrs["body_Model.y"];
+        int vr_z = vrs["body_Model.z"];
 
-        var vr_Vx = vrs["body_Model.dx"];
-        var vr_Vy = vrs["body_Model.dy"];
-        var vr_Vz = vrs["body_Model.dz"];
+        int vr_Vx = vrs["body_Model.dx"];
+        int vr_Vy = vrs["body_Model.dy"];
+        int vr_Vz = vrs["body_Model.dz"];
 
-        var vr_Vx_B = vrs["body_Model.body_fixed_dx"];
-        var vr_Vy_B = vrs["body_Model.body_fixed_dy"];
-        var vr_Vz_B = vrs["body_Model.body_fixed_dz"];
+        int vr_Vx_B = vrs["body_Model.body_fixed_dx"];
+        int vr_Vy_B = vrs["body_Model.body_fixed_dy"];
+        int vr_Vz_B = vrs["body_Model.body_fixed_dz"];
 
-        var vr_tire_w1 = vrs["tire_front_left.roll"];
-        var vr_tire_w2 = vrs["tire_front_right.roll"];
-        var vr_tire_w3 = vrs["tire_rear_right.roll"];
-        var vr_tire_w4 = vrs["tire_rear_left.roll"];
+        int vr_tire_w1 = vrs["tire_front_left.roll"];
+        int vr_tire_w2 = vrs["tire_front_right.roll"];
+        int vr_tire_w3 = vrs["tire_rear_right.roll"];
+        int vr_tire_w4 = vrs["tire_rear_left.roll"];
 
-        var vr_rotation_radius = vrs["ackerman_Steering_Model.left_steer_angle"];
+        int vr_rotation_radius = vrs["ackerman_Steering_Model.left_steer_angle"];
 
-        var vr_unsprung_z1 = vrs["suspension_front_left.suspension_comp_dist"];
-        var vr_unsprung_z2 = vrs["suspension_front_right.suspension_comp_dist"];
-        var vr_unsprung_z3 = vrs["suspension_rear_right.suspension_comp_dist"];
-        var vr_unsprung_z4 = vrs["suspension_rear_left.suspension_comp_dist"];
+        int vr_unsprung_z1 = vrs["suspension_front_left.suspension_comp_dist"];
+        int vr_unsprung_z2 = vrs["suspension_front_right.suspension_comp_dist"];
+        int vr_unsprung_z3 = vrs["suspension_rear_right.suspension_comp_dist"];
+        int vr_unsprung_z4 = vrs["suspension_rear_left.suspension_comp_dist"];
 
-        var vr_left_steer = vrs["ackerman_Steering_Model.left_steer_angle"];
-        var vr_right_steer = vrs["ackerman_Steering_Model.right_steer_angle"];
-        var vr_w = vrs["body_Model.d_yaw"];
-        //var vr_we = vrs["ev_motor_model.w"];
-        var vr_we = vrs["ev_motor_model.shaft_rotation_speed"];
-        var vr_nf = vrs["tire_front_right.tire_normal_force"];
+        int vr_left_steer = vrs["ackerman_Steering_Model.left_steer_angle"];
+        int vr_right_steer = vrs["ackerman_Steering_Model.right_steer_angle"];
+        int vr_w = vrs["body_Model.d_yaw"];
+        int vr_we = vrs["ev_motor_model.shaft_rotation_speed"];
+        int vr_nf = vrs["tire_front_right.tire_normal_force"];
 
-        var vr_nl_fl = vrs["tire_front_left.d_roll"];
-        //var vr_sa_fl = vrs["rear_open_differential.w_right"];
-        var vr_sa_fl = vrs["tire_front_right.d_roll"];
-        var vr_tr_fl = vrs["body_Model.dx"];
-        var vr_s_fl = vrs["body_Model.dy"];
+        int vr_nl_fl = vrs["tire_front_left.d_roll"];
+        int vr_sa_fl = vrs["tire_front_right.d_roll"];
+        int vr_tr_fl = vrs["body_Model.dx"];
+        int vr_s_fl = vrs["body_Model.dy"];
 
-        var vr_nl_rl = vrs["tire_rear_left.d_roll"];
-        var vr_sa_rl = vrs["tire_rear_right.d_roll"];
-        var vr_tr_rl = vrs["tire_rear_left.slip_ratio"];
-        var vr_s_rl = vrs["tire_rear_right.slip_ratio"];
-        //var vr_sa_rl = vrs["tire_rear_left.body_vy"];
-        //var vr_tr_rl = vrs["tire_rear_right.d_roll"];
-        //var vr_s_rl = vrs["tire_rear_left.slip_angle"];
+        int vr_nl_rl = vrs["tire_rear_left.d_roll"];
+        int vr_sa_rl = vrs["tire_rear_right.d_roll"];
+        int vr_tr_rl = vrs["tire_rear_left.slip_ratio"];
+        int vr_s_rl = vrs["tire_rear_right.slip_ratio"];
 
-        //var vr_nl_fl = vrs["tire_front_left.d_roll"];
-        //var vr_sa_fl = vrs["tire_front_right.d_roll"];
-        //var vr_tr_fl = vrs["tire_rear_left.d_roll"];
-        //var vr_s_fl = vrs["tire_rear_right.d_roll"];
+        int vr_roll = vrs["body_Model.roll"];
+        int vr_pitch = vrs["body_Model.pitch"];
+        int vr_yaw = vrs["body_Model.yaw"];
 
-        //var vr_nl_rl = vrs["body_Model.roll"];
-        //var vr_sa_rl = vrs["body_Model.pitch"];
-        //var vr_tr_rl = vrs["body_Model.yaw"];
-        //var vr_s_rl = vrs["body_Model.roll"];
+        int vr_Accel = vrs["acceleration.k"];
+        int vr_steer = vrs["angle_steer.k"];
+        int vr_brake = vrs["brake.k"];
+        int vr_gear = vrs["transmission.k"];
 
-        vr_roll = vrs["body_Model.roll"];
-        vr_pitch = vrs["body_Model.pitch"];
-        vr_yaw = vrs["body_Model.yaw"];
+        int vr_ray_FL = vrs["ray_front_left.k"];
+        int vr_ray_FR = vrs["ray_front_right.k"];
+        int vr_ray_RR = vrs["ray_rear_right.k"];
+        int vr_ray_RL = vrs["ray_rear_left.k"];
 
-        vr_Accel = vrs["acceleration.k"];
-        vr_steer = vrs["angle_steer.k"];
-        vr_brake = vrs["brake.k"];
-        vr_gear = vrs["transmission.k"];
+        int vr_forward_x_FL = vrs["front_x_fl.k"];
+        int vr_forward_y_FL = vrs["front_y_fl.k"];
+        int vr_forward_z_FL = vrs["front_z_fl.k"];
+        int vr_left_x_FL = vrs["left_x_fl.k"];
+        int vr_left_y_FL = vrs["left_y_fl.k"];
+        int vr_left_z_FL = vrs["left_z_fl.k"];
 
-        vr_ray_FL = vrs["ray_front_left.k"];
-        vr_ray_FR = vrs["ray_front_right.k"];
-        vr_ray_RR = vrs["ray_rear_right.k"];
-        vr_ray_RL = vrs["ray_rear_left.k"];
+        int vr_forward_x_FR = vrs["front_x_fr.k"];
+        int vr_forward_y_FR = vrs["front_y_fr.k"];
+        int vr_forward_z_FR = vrs["front_z_fr.k"];
+        int vr_left_x_FR = vrs["left_x_fr.k"];
+        int vr_left_y_FR = vrs["left_y_fr.k"];
+        int vr_left_z_FR = vrs["left_z_fr.k"];
 
-        vr_forward_x_FL = vrs["front_x_fl.k"];
-        vr_forward_y_FL = vrs["front_y_fl.k"];
-        vr_forward_z_FL = vrs["front_z_fl.k"];
-        vr_left_x_FL = vrs["left_x_fl.k"];
-        vr_left_y_FL = vrs["left_y_fl.k"];
-        vr_left_z_FL = vrs["left_z_fl.k"];
+        int vr_forward_x_RR = vrs["front_x_rr.k"];
+        int vr_forward_y_RR = vrs["front_y_rr.k"];
+        int vr_forward_z_RR = vrs["front_z_rr.k"];
+        int vr_left_x_RR = vrs["left_x_rr.k"];
+        int vr_left_y_RR = vrs["left_y_rr.k"];
+        int vr_left_z_RR = vrs["left_z_rr.k"];
 
-        vr_forward_x_FR = vrs["front_x_fr.k"];
-        vr_forward_y_FR = vrs["front_y_fr.k"];
-        vr_forward_z_FR = vrs["front_z_fr.k"];
-        vr_left_x_FR = vrs["left_x_fr.k"];
-        vr_left_y_FR = vrs["left_y_fr.k"];
-        vr_left_z_FR = vrs["left_z_fr.k"];
+        int vr_forward_x_RL = vrs["front_x_rl.k"];
+        int vr_forward_y_RL = vrs["front_y_rl.k"];
+        int vr_forward_z_RL = vrs["front_z_rl.k"];
+        int vr_left_x_RL = vrs["left_x_rl.k"];
+        int vr_left_y_RL = vrs["left_y_rl.k"];
+        int vr_left_z_RL = vrs["left_z_rl.k"];
+         
+        set_key = new List<int>
+        {
+            vr_Accel, vr_brake, vr_gear, vr_steer, vr_ray_FL, vr_ray_FR, vr_ray_RR, vr_ray_RL,
+            vr_forward_x_FL, vr_forward_y_FL, vr_forward_z_FL, vr_left_x_FL, vr_left_y_FL, vr_left_z_FL,
+            vr_forward_x_FR, vr_forward_y_FR, vr_forward_z_FR, vr_left_x_FR, vr_left_y_FR, vr_left_z_FR,
+            vr_forward_x_RR, vr_forward_y_RR, vr_forward_z_RR, vr_left_x_RR, vr_left_y_RR, vr_left_z_RR,
+            vr_forward_x_RL, vr_forward_y_RL, vr_forward_z_RL, vr_left_x_RL, vr_left_y_RL, vr_left_z_RL
+        };
 
-        vr_forward_x_RR = vrs["front_x_rr.k"];
-        vr_forward_y_RR = vrs["front_y_rr.k"];
-        vr_forward_z_RR = vrs["front_z_rr.k"];
-        vr_left_x_RR = vrs["left_x_rr.k"];
-        vr_left_y_RR = vrs["left_y_rr.k"];
-        vr_left_z_RR = vrs["left_z_rr.k"];
+        UnityEngine.Debug.Log($"vr_steer: {vr_steer}, vr_brake: {vr_brake}");
 
-        vr_forward_x_RL = vrs["front_x_rl.k"];
-        vr_forward_y_RL = vrs["front_y_rl.k"];
-        vr_forward_z_RL = vrs["front_z_rl.k"];
-        vr_left_x_RL = vrs["left_x_rl.k"];
-        vr_left_y_RL = vrs["left_y_rl.k"];
-        vr_left_z_RL = vrs["left_z_rl.k"];
-
-        get_key.Add(vr_x);      // 0
-        get_key.Add(vr_y);      // 1
-        get_key.Add(vr_yaw);     // 2
-        get_key.Add(vr_left_steer);       // 3
-        get_key.Add(vr_right_steer);      // 4
-        get_key.Add(vr_z);      // 5
-        get_key.Add(vr_roll);    // 6
-        get_key.Add(vr_pitch);   // 7
-        get_key.Add(vr_unsprung_z1); // 8
-        get_key.Add(vr_unsprung_z2); // 9
-        get_key.Add(vr_unsprung_z3); // 10
-        get_key.Add(vr_unsprung_z4); // 11
-        get_key.Add(vr_Vx);          // 12  
-        get_key.Add(vr_Vy);          // 13
-        get_key.Add(vr_tire_w1);     // 14
-        get_key.Add(vr_tire_w2);     // 15
-        get_key.Add(vr_tire_w3);     // 16
-        get_key.Add(vr_tire_w4);     // 17
-        get_key.Add(vr_we);// 18
-        get_key.Add(vr_Vx_B);// 19
-        get_key.Add(vr_Vy_B);// 20
-        get_key.Add(vr_nl_fl);// 21
-        get_key.Add(vr_sa_fl);// 22
-        get_key.Add(vr_tr_fl);// 23
-        get_key.Add(vr_s_fl);// 24
-        get_key.Add(vr_nl_rl);// 25
-        get_key.Add(vr_sa_rl);// 26
-        get_key.Add(vr_tr_rl);// 27
-        get_key.Add(vr_s_rl);// 28
-
+        get_key = new List<int>
+        {
+            vr_x,           // 0
+            vr_y,           // 1
+            vr_yaw,         // 2
+            vr_left_steer,  // 3
+            vr_right_steer, // 4
+            vr_z,           // 5
+            vr_roll,        // 6
+            vr_pitch,       // 7
+            vr_unsprung_z1, // 8
+            vr_unsprung_z2, // 9
+            vr_unsprung_z3, // 10
+            vr_unsprung_z4, // 11
+            vr_Vx,          // 12
+            vr_Vy,          // 13
+            vr_tire_w1,     // 14
+            vr_tire_w2,     // 15
+            vr_tire_w3,     // 16
+            vr_tire_w4,     // 17
+            vr_we,          // 18
+            vr_Vx_B,        // 19
+            vr_Vy_B,        // 20
+            vr_nl_fl,       // 21
+            vr_sa_fl,       // 22
+            vr_tr_fl,       // 23
+            vr_s_fl,        // 24
+            vr_nl_rl,       // 25
+            vr_sa_rl,       // 26
+            vr_tr_rl,       // 27
+            vr_s_rl         // 28
+        };
         #endregion
-
-        Simulation_Initial_Set();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        //UnityEngine.Debug.Log(Time.deltaTime);
+        sw.Restart();
         realCurrentTime += Time.deltaTime;
-        if(initialize_executed)
+        if (initialize_executed)
         {
             Simulation_Do_Step();
-            //while ((sw.Elapsed - loop_start).TotalMilliseconds < 0.001) { }
         }
-        
+
+        sw.Stop(); // 타이머 중지
+        UnityEngine.Debug.Log($"FMI Simulator 처리 시간: {sw.Elapsed.TotalMilliseconds:F3} ms"); // 소수점 3자리까지 출력
     }
-    private void Simulation_Initial_Set()
+
+    void Update()
     {
-        Dictionary<int, double> Dic_set = new Dictionary<int, double>();
-        List<int> set_key = new List<int>(Dic_set.Keys);
-        List<double> set_value = new List<double>(Dic_set.Values);
-        using (Py.GIL())
-        {
-            FMI.simulate_init_set(set_key, set_value);
-        }
     }
-    
+
     private void Simulation_Do_Step()
     {
-        //UnityEngine.Debug.Log($"throttle:{device.throttleInput}, brake:{device.brakeInput}, gear:{device.gearInput}, steer: {device.steeringInput}");
-        Dictionary<int, double> Dic_set = new Dictionary<int, double>();
-        Dic_set.Add(vr_Accel, device.throttleInput);
-        Dic_set.Add(vr_brake, device.brakeInput);
-        Dic_set.Add(vr_gear, device.gearInput);
-        Dic_set.Add(vr_steer, -device.steeringInput);
-        Dic_set.Add(vr_ray_FL, ray_FL);
-        Dic_set.Add(vr_ray_FR, ray_FR);
-        Dic_set.Add(vr_ray_RR, ray_RR);
-        Dic_set.Add(vr_ray_RL, ray_RL);
-
-        Dic_set.Add(vr_forward_x_FL, forward_FL[0]);
-        Dic_set.Add(vr_forward_y_FL, forward_FL[1]);
-        Dic_set.Add(vr_forward_z_FL, forward_FL[2]);
-        Dic_set.Add(vr_left_x_FL, left_FL[0]);
-        Dic_set.Add(vr_left_y_FL, left_FL[1]);
-        Dic_set.Add(vr_left_z_FL, left_FL[2]);
-
-        Dic_set.Add(vr_forward_x_FR, forward_FR[0]);
-        Dic_set.Add(vr_forward_y_FR, forward_FR[1]);
-        Dic_set.Add(vr_forward_z_FR, forward_FR[2]);
-        Dic_set.Add(vr_left_x_FR, left_FR[0]);
-        Dic_set.Add(vr_left_y_FR, left_FR[1]);
-        Dic_set.Add(vr_left_z_FR, left_FR[2]);
-
-        Dic_set.Add(vr_forward_x_RR, forward_RR[0]);
-        Dic_set.Add(vr_forward_y_RR, forward_RR[1]);
-        Dic_set.Add(vr_forward_z_RR, forward_RR[2]);
-        Dic_set.Add(vr_left_x_RR, left_RR[0]);
-        Dic_set.Add(vr_left_y_RR, left_RR[1]);
-        Dic_set.Add(vr_left_z_RR, left_RR[2]);
-
-        Dic_set.Add(vr_forward_x_RL, forward_RL[0]);
-        Dic_set.Add(vr_forward_y_RL, forward_RL[1]);
-        Dic_set.Add(vr_forward_z_RL, forward_RL[2]);
-        Dic_set.Add(vr_left_x_RL, left_RL[0]);
-        Dic_set.Add(vr_left_y_RL, left_RL[1]);
-        Dic_set.Add(vr_left_z_RL, left_RL[2]);
-
-        List<int> set_key = new List<int>(Dic_set.Keys);
-        List<double> set_value = new List<double>(Dic_set.Values);
+        set_value = new List<float>
+        {
+            device.throttleInput, device.brakeInput, device.gearInput, -device.steeringInput,
+            ray_FL, ray_FR, ray_RR, ray_RL,
+            forward_FL[0], forward_FL[1], forward_FL[2], left_FL[0], left_FL[1], left_FL[2],
+            forward_FR[0], forward_FR[1], forward_FR[2], left_FR[0], left_FR[1], left_FR[2],
+            forward_RR[0], forward_RR[1], forward_RR[2], left_RR[0], left_RR[1], left_RR[2],
+            forward_RL[0], forward_RL[1], forward_RL[2], left_RL[0], left_RL[1], left_RL[2]
+        };
 
         using (Py.GIL())
         {
-            // if prev_time is None:
-            //    prev_time = clock
-            //    return 
-            // cur_time => clock 라이브러리
-            // time_interval = cur_time - prev_time
-            get_value = FMI.simulate_step(0.005, set_key, set_value, get_key);
-            // prev_time = cur_time
+            get_value = FMI.simulate_step(0.002, set_key, set_value, get_key);
         }
-        simulationResult.Add((double)FMI.current_time);
-        simulationResult.Add(get_value[0]);
-        simulationResult.Add(get_value[1]);
-        simulationResult.Add(get_value[2] * 180.0f / Mathf.PI);
-        simulationResult.Add(get_value[5]);
-        simulationResult.Add(get_value[6] * 180.0f / Mathf.PI);
-        simulationResult.Add(get_value[7] * 180.0f / Mathf.PI);
-        simulationResult.Add(get_value[8]);
-        simulationResult.Add(get_value[9]);
-        simulationResult.Add(get_value[10]);
-        simulationResult.Add(get_value[11]);
-        simulationResult.Add(get_value[3] * 180.0f / Mathf.PI);
-        simulationResult.Add(get_value[4] * 180.0f / Mathf.PI);
-        simulationResult.Add(get_value[12]);
-        simulationResult.Add(get_value[13]);
-        simulationResult.Add(get_value[14] * 180.0f / Mathf.PI);
-        simulationResult.Add(get_value[15] * 180.0f / Mathf.PI);
-        simulationResult.Add(get_value[16] * 180.0f / Mathf.PI);
-        simulationResult.Add(get_value[17] * 180.0f / Mathf.PI);
-        simulationResult.Add(get_value[19]);
-        simulationResult.Add(get_value[20]);
+
+        simulationResult = new List<float>
+        {
+            (float) FMI.current_time,
+            (float) get_value[0],
+            (float) get_value[1],
+            (float) get_value[2] * 180.0f / Mathf.PI,
+            (float) get_value[5],
+            (float) get_value[6] * 180.0f / Mathf.PI,
+            (float) get_value[7] * 180.0f / Mathf.PI,
+            (float) get_value[8],
+            (float) get_value[9],
+            (float) get_value[10],
+            (float) get_value[11],
+            (float) get_value[3] * 180.0f / Mathf.PI,
+            (float) get_value[4] * 180.0f / Mathf.PI,
+            (float) get_value[12],
+            (float) get_value[13],
+            (float) get_value[14] * 180.0f / Mathf.PI,
+            (float) get_value[15] * 180.0f / Mathf.PI,
+            (float) get_value[16] * 180.0f / Mathf.PI,
+            (float) get_value[17] * 180.0f / Mathf.PI,
+            (float) get_value[19],
+            (float) get_value[20]
+        };
+
         transform.GetComponent<CarController>().receiveSimulationResult(simulationResult);
-        simulationResult.Clear();
     }
+
     public void receiveRayInfo(List<float> rayInfo)
     {
         //Debug.Log("Receiveing Ray Info");
@@ -372,12 +287,12 @@ public class FMISimulator : MonoBehaviour
         left_RL[2] = rayInfo[27];
         initialize_executed = true;
     }
+
     private void OnApplicationQuit()
     {
-        using(Py.GIL())
+        using (Py.GIL())
         {
             FMI.simulate_free();
-            Simulation_Initial_Set();
         }
     }
 }

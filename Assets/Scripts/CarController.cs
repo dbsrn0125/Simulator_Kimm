@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using System.Diagnostics;
+
 public class CarController : MonoBehaviour
 {
+    Stopwatch sw;
+    Stopwatch sw2;
+
     public Transform parent_coordinate;
     public List<Transform> WheelsTransform;
-    //public List<Transform> WheelsInertialTransform;
     public List<Transform> BodyTransform;
     private List<float> rayInfo = new List<float>();
     float[] list_wheel_ray = new float[4] { -0.7354f, -0.7354f, -0.7354f, -0.7354f }; // { 1.05f, 1.05f, 1.05f, 1.05f };
     float[] list_wheel_z = new float[4] { 0.0f, 0.0f, 0.0f, 0.0f };
     float[] list_wheel_roll = new float[4] { 0.0f, 0.0f, 0.0f, 0.0f };
-
-    float[] list_ground_roll = new float[4] { 0.0f, 0.0f, 0.0f, 0.0f };
-    float[] list_ground_pitch = new float[4] { 0.0f, 0.0f, 0.0f, 0.0f };
 
     Vector3 forward_FL = new Vector3(0, 0, 1);
     Vector3 forward_FR = new Vector3(0, 0, 1);
@@ -30,11 +31,8 @@ public class CarController : MonoBehaviour
     Quaternion parent_rotation_inv = new Quaternion(0, 0, 0, 1);
 
     public float left_steer = 0.0f, right_steer = 0.0f;
-    //readonly float wheelRadius = 0.3677536f;
-    //float suspension_dist = 0.3677536f;
-    //float suspension_dist = 0.4177536f;
-    readonly float wheelRadius = 0.3677536f;
-    float suspension_dist = 0.4177536f;
+    readonly float wheelRadius = 0.35f;
+    float suspension_dist = 0.4f;
 
     public float value_yaw = 0.0f, value_x = 0.0f, value_x_old = 0.0f, value_y = 0.0f, value_y_old = 0.0f, cur_time = 0;
     public float value_roll = 0.0f, value_pitch = 0.0f;
@@ -43,9 +41,13 @@ public class CarController : MonoBehaviour
     float value_yaw_old = 0;
     float body_fixed_vx = 0, body_fixed_vy = 0;
     int layer_mask;
+
     // Start is called before the first frame update
     void Start()
     {
+        sw = new Stopwatch();
+        sw2 = new Stopwatch();
+
         layer_mask = 1 << LayerMask.NameToLayer("Terrain");
         Transform[] allChildren = GetComponentsInChildren<Transform>();
 
@@ -63,12 +65,15 @@ public class CarController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        sw2.Restart();
+        transform.GetComponent<FMISimulator>().receiveRayInfo(rayInfo);
+
         transform.position = new Vector3(transform.position.x, value_z + suspension_dist, transform.position.z);
         transform.rotation = Quaternion.Euler(value_pitch, -value_yaw_old, -value_roll);
         transform.rotation = Quaternion.Euler(value_pitch, -value_yaw, -value_roll);
-        transform.position = new Vector3(-13,0.5f,-780) + new Vector3(-value_y, transform.position.y, value_x);
+        transform.position = new Vector3(-13, 0, -780) + new Vector3(-value_y, transform.position.y, value_x);
         value_x_old = value_x;
         value_y_old = value_y;
         value_yaw_old = value_yaw;
@@ -156,70 +161,57 @@ public class CarController : MonoBehaviour
                 t.localPosition = new Vector3(t.localPosition.x, suspension_dist - list_wheel_z[3], t.localPosition.z);
             }
         }
+        sw2.Stop(); // 타이머 중지
+        UnityEngine.Debug.Log($"Transform FixedUpdate 처리 시간: {sw2.Elapsed.TotalMilliseconds:F3} ms"); // 소수점 3자리까지 출력
+        
     }
+
     private Vector3 Rotate(Quaternion q, Vector3 v)
     {
-        Vector3 rotated_v = new Vector3(0, 0, 0);
-        rotated_v.x = v.x * (q.w * q.w + q.x * q.x - q.y * q.y - q.z * q.z) + 2 * v.y * (q.x * q.y - q.w * q.z) + 2 * v.z * (q.w * q.y + q.x * q.z);
-        rotated_v.y = 2 * v.x * (q.w * q.z + q.x * q.y) + v.y * (q.w * q.w - q.x * q.x + q.y * q.y - q.z * q.z) + 2 * v.z * (q.y * q.z - q.w * q.x);
-        rotated_v.z = 2 * v.x * (q.x * q.z - q.w * q.y) + 2 * v.y * (q.w * q.x + q.y * q.z) + v.z * (q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z);
-        return rotated_v;
+        return q * v; // Unity의 내장 함수 사용
     }
 
-    public void receiveSimulationResult(List<double> simulationResult)
+    public void receiveSimulationResult(List<float> simulationResult)
     {
-        //Debug.Log("receiving SimulationResult");
-        cur_time = (float)simulationResult[0];
-        value_x = (float)simulationResult[1];
-        value_y = (float)simulationResult[2];
-        value_yaw = (float)simulationResult[3];
-        value_z = (float)simulationResult[4];
-        value_roll = (float)simulationResult[5];
-        value_pitch = (float)simulationResult[6];
-        list_wheel_z[0] = (float)simulationResult[7];
-        list_wheel_z[1] = (float)simulationResult[8];
-        list_wheel_z[2] = (float)simulationResult[9];
-        list_wheel_z[3] = (float)simulationResult[10];
-        left_steer = (float)simulationResult[11];
-        right_steer = (float)simulationResult[12];
-        value_Vx = (float)simulationResult[13];
-        value_Vy = (float)simulationResult[14];
-        list_wheel_roll[0] = (float)simulationResult[15];
-        list_wheel_roll[1] = (float)simulationResult[16];
-        list_wheel_roll[2] = (float)simulationResult[17];
-        list_wheel_roll[3] = (float)simulationResult[18];
-        body_fixed_vx = (float)simulationResult[19];
-        body_fixed_vy = (float)simulationResult[20];
+        UnityEngine.Debug.Log("Simulation 진행 중");
+        cur_time = simulationResult[0];
+        value_x = simulationResult[1];
+        value_y = simulationResult[2];
+        value_yaw = simulationResult[3];
+        value_z = simulationResult[4];
+        value_roll = simulationResult[5];
+        value_pitch = simulationResult[6];
+        list_wheel_z[0] = simulationResult[7];
+        list_wheel_z[1] = simulationResult[8];
+        list_wheel_z[2] = simulationResult[9];
+        list_wheel_z[3] = simulationResult[10];
+        left_steer = simulationResult[11];
+        right_steer = simulationResult[12];
+        value_Vx = simulationResult[13];
+        value_Vy = simulationResult[14];
+        list_wheel_roll[0] = simulationResult[15];
+        list_wheel_roll[1] = simulationResult[16];
+        list_wheel_roll[2] = simulationResult[17];
+        list_wheel_roll[3] = simulationResult[18];
+        body_fixed_vx = simulationResult[19];
+        body_fixed_vy = simulationResult[20];
 
-        rayInfo.Add(list_wheel_ray[0]);
-        rayInfo.Add(list_wheel_ray[1]);
-        rayInfo.Add(list_wheel_ray[2]);
-        rayInfo.Add(list_wheel_ray[3]);
-        rayInfo.Add(forward_FL.z);
-        rayInfo.Add(-forward_FL.x);
-        rayInfo.Add(forward_FL.y);
-        rayInfo.Add(forward_FR.z);
-        rayInfo.Add(-forward_FR.x);
-        rayInfo.Add(forward_FR.y);
-        rayInfo.Add(forward_RR.z);
-        rayInfo.Add(-forward_RR.x);
-        rayInfo.Add(forward_RR.y);
-        rayInfo.Add(forward_RL.z);
-        rayInfo.Add(-forward_RL.x);
-        rayInfo.Add(forward_RL.y);
-        rayInfo.Add(left_FL.z);
-        rayInfo.Add(-left_FL.x);
-        rayInfo.Add(left_FL.y);
-        rayInfo.Add(left_FR.z);
-        rayInfo.Add(-left_FR.x);
-        rayInfo.Add(left_FR.y);
-        rayInfo.Add(left_RR.z);
-        rayInfo.Add(-left_RR.x);
-        rayInfo.Add(left_RR.y);
-        rayInfo.Add(left_RL.z);
-        rayInfo.Add(-left_RL.x);
-        rayInfo.Add(left_RL.y);
-        transform.GetComponent<FMISimulator>().receiveRayInfo(rayInfo);
-        rayInfo.Clear();
+        rayInfo = new List<float>
+        {
+            list_wheel_ray[0], list_wheel_ray[1], list_wheel_ray[2], list_wheel_ray[3],
+            forward_FL.z, -forward_FL.x, forward_FL.y,
+            forward_FR.z, -forward_FR.x, forward_FR.y,
+            forward_RR.z, -forward_RR.x, forward_RR.y,
+            forward_RL.z, -forward_RL.x, forward_RL.y,
+            left_FL.z, -left_FL.x, left_FL.y,
+            left_FR.z, -left_FR.x, left_FR.y,
+            left_RR.z, -left_RR.x, left_RR.y,
+            left_RL.z, -left_RL.x, left_RL.y
+        };
+
+        sw.Stop(); // 타이머 중지
+        UnityEngine.Debug.Log($"receiveSimulationResult 실행 시간: {sw.Elapsed.TotalMilliseconds:F3} ms"); // 소수점 3자리까지 출력
+
+        sw.Restart();
     }
 }
