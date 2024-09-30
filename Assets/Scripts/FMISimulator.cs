@@ -216,7 +216,7 @@ public class FMISimulator : MonoBehaviour
         {
             using (Py.GIL())
             {
-                get_value = FMI.simulate_step(0.002, set_key, set_value, get_key);
+                get_value = FMI.simulate_step(0.001, set_key, set_value, get_key);
             }
         }
         catch(Exception ex)
