@@ -212,12 +212,17 @@ public class FMISimulator : MonoBehaviour
             forward_RR[0], forward_RR[1], forward_RR[2], left_RR[0], left_RR[1], left_RR[2],
             forward_RL[0], forward_RL[1], forward_RL[2], left_RL[0], left_RL[1], left_RL[2]
         };
-
-        using (Py.GIL())
+        try
         {
-            get_value = FMI.simulate_step(0.002, set_key, set_value, get_key);
+            using (Py.GIL())
+            {
+                get_value = FMI.simulate_step(0.002, set_key, set_value, get_key);
+            }
         }
-
+        catch(Exception ex)
+        {
+            UnityEngine.Debug.LogError($"Error during simulation step: {ex.Message}");
+        }
         simulationResult = new List<float>
         {
             (float) FMI.current_time,
@@ -288,11 +293,14 @@ public class FMISimulator : MonoBehaviour
         initialize_executed = true;
     }
 
-    private void OnApplicationQuit()
+    private void OnDisable()
     {
         using (Py.GIL())
         {
+            //dynamic gc = Py.Import("gc");
+            //gc.collect();
             FMI.simulate_free();
+            FMI = null;
         }
     }
 }
