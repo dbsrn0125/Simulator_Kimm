@@ -221,7 +221,6 @@ public class FMISimulator : MonoBehaviour
             {
                 var pythonSetKey = new PyList(set_key.Select(k => new PyInt(k)).ToArray());
                 var pythonSetValue = new PyList(set_value.Select(v => new PyFloat(v)).ToArray());
-                var pythonGetKey = new PyList(get_key.Select(h => new PyFloat(h)).ToArray());
                 get_value = FMI.simulate_step(0.001, pythonSetKey, pythonSetValue, get_key);
             }
         }
