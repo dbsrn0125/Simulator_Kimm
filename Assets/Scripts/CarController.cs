@@ -31,8 +31,8 @@ public class CarController : MonoBehaviour
     Quaternion parent_rotation_inv = new Quaternion(0, 0, 0, 1);
 
     public float left_steer = 0.0f, right_steer = 0.0f;
-    readonly float wheelRadius = 0.35f;
-    float suspension_dist = 0.4f;
+    readonly float wheelRadius = 0.3677536f;
+    float suspension_dist = 0.4177536f;
 
     public float value_yaw = 0.0f, value_x = 0.0f, value_x_old = 0.0f, value_y = 0.0f, value_y_old = 0.0f, cur_time = 0;
     public float value_roll = 0.0f, value_pitch = 0.0f;
@@ -47,7 +47,7 @@ public class CarController : MonoBehaviour
     {
         sw = new Stopwatch();
         sw2 = new Stopwatch();
-
+        parent_coordinate.position = new Vector3(-13, 0, -780);
         layer_mask = 1 << LayerMask.NameToLayer("Terrain");
         Transform[] allChildren = GetComponentsInChildren<Transform>();
 
@@ -81,7 +81,7 @@ public class CarController : MonoBehaviour
         {
             RaycastHit[] wheelHits = Physics.RaycastAll(t.position, -transform.up, wheelRadius + 10.05f, layer_mask);
 
-            if (t.name == "FrontLeftWheel")
+            if (t.name == "WheelFL")
             {
                 //Debug.Log("FrontLeftWheel");
                 t.localRotation = Quaternion.Euler(new Vector3(0, -left_steer + 180, 0));
@@ -100,9 +100,9 @@ public class CarController : MonoBehaviour
                     list_wheel_ray[0] = -1000.0f;
                 }
 
-                t.localPosition = new Vector3(t.localPosition.x, suspension_dist - list_wheel_z[0], t.localPosition.z);
+                t.localPosition = new Vector3(t.localPosition.x, -suspension_dist - list_wheel_z[0], t.localPosition.z);
             }
-            if (t.name == "FrontRightWheel")
+            if (t.name == "WheelFR")
             {
                 t.localRotation = Quaternion.Euler(new Vector3(0, -right_steer, 0));
                 RaycastHit[] wheelHits_f = Physics.RaycastAll(t.position + t.forward * 0.1f, -transform.up, wheelRadius + 10.0f, layer_mask);
@@ -120,9 +120,9 @@ public class CarController : MonoBehaviour
                     list_wheel_ray[1] = -1000.0f;
                 }
 
-                t.localPosition = new Vector3(t.localPosition.x, suspension_dist - list_wheel_z[1], t.localPosition.z);
+                t.localPosition = new Vector3(t.localPosition.x, -suspension_dist - list_wheel_z[1], t.localPosition.z);
             }
-            if (t.name == "RearRightWheel")
+            if (t.name == "WheelRR")
             {
                 t.localRotation = Quaternion.Euler(new Vector3(list_wheel_roll[2], 0, 0));
                 RaycastHit[] wheelHits_f = Physics.RaycastAll(t.position + transform.forward * 0.1f, -transform.up, wheelRadius + 10.0f, layer_mask);
@@ -139,9 +139,9 @@ public class CarController : MonoBehaviour
                     list_wheel_ray[2] = -1000.0f;
                 }
 
-                t.localPosition = new Vector3(t.localPosition.x, suspension_dist - list_wheel_z[2], t.localPosition.z);
+                t.localPosition = new Vector3(t.localPosition.x, -suspension_dist - list_wheel_z[2], t.localPosition.z);
             }
-            if (t.name == "RearLeftWheel")
+            if (t.name == "WheelRL")
             {
                 t.localRotation = Quaternion.Euler(new Vector3(-list_wheel_roll[3], 180, 0));
                 RaycastHit[] wheelHits_f = Physics.RaycastAll(t.position + transform.forward * 0.1f, -transform.up, wheelRadius + 10.0f, layer_mask);
@@ -158,7 +158,7 @@ public class CarController : MonoBehaviour
                     list_wheel_ray[3] = -1000.0f;
                 }
 
-                t.localPosition = new Vector3(t.localPosition.x, suspension_dist - list_wheel_z[3], t.localPosition.z);
+                t.localPosition = new Vector3(t.localPosition.x, -suspension_dist - list_wheel_z[3], t.localPosition.z);
             }
         }
         sw2.Stop(); // 타이머 중지
