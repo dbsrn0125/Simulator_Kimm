@@ -73,7 +73,7 @@ public class CarController : MonoBehaviour
         transform.position = new Vector3(transform.position.x, value_z + suspension_dist, transform.position.z);
         transform.rotation = Quaternion.Euler(value_pitch, -value_yaw_old, -value_roll);
         transform.rotation = Quaternion.Euler(value_pitch, -value_yaw, -value_roll);
-        transform.position = new Vector3(-13, 0, -780) + new Vector3(-value_y, transform.position.y, value_x);
+        transform.position = new Vector3(-value_y, transform.position.y, value_x);
         value_x_old = value_x;
         value_y_old = value_y;
         value_yaw_old = value_yaw;
