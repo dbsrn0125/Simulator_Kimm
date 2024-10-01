@@ -5,6 +5,8 @@ using UnityEditor.Scripting.Python;
 using Python.Runtime;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Linq;
 
 public class FMISimulator : MonoBehaviour
 {
@@ -51,6 +53,7 @@ public class FMISimulator : MonoBehaviour
         {
             dynamic FMI_py = Py.Import("custom_input_test");
             FMI = FMI_py.FMI_manager(Environment.CurrentDirectory + "\\Assets\\" + "\\fmu\\" + "KIMM_CAR.fmu");
+            FMI.simulate_init();
             vrs = FMI.get_vrs();
         }
         #region variables
@@ -136,7 +139,7 @@ public class FMISimulator : MonoBehaviour
         int vr_left_x_RL = vrs["left_x_rl.k"];
         int vr_left_y_RL = vrs["left_y_rl.k"];
         int vr_left_z_RL = vrs["left_z_rl.k"];
-         
+
         set_key = new List<int>
         {
             vr_Accel, vr_brake, vr_gear, vr_steer, vr_ray_FL, vr_ray_FR, vr_ray_RR, vr_ray_RL,
@@ -216,7 +219,10 @@ public class FMISimulator : MonoBehaviour
         {
             using (Py.GIL())
             {
-                get_value = FMI.simulate_step(0.001, set_key, set_value, get_key);
+                var pythonSetKey = new PyList(set_key.Select(k => new PyInt(k)).ToArray());
+                var pythonSetValue = new PyList(set_value.Select(v => new PyFloat(v)).ToArray());
+                var pythonGetKey = new PyList(get_key.Select(h => new PyFloat(h)).ToArray());
+                get_value = FMI.simulate_step(0.001, pythonSetKey, pythonSetValue, get_key);
             }
         }
         catch(Exception ex)
@@ -293,14 +299,29 @@ public class FMISimulator : MonoBehaviour
         initialize_executed = true;
     }
 
-    private void OnDisable()
+    private async void OnDisable()
     {
-        using (Py.GIL())
+        try
         {
-            //dynamic gc = Py.Import("gc");
-            //gc.collect();
-            FMI.simulate_free();
-            FMI = null;
+            UnityEngine.Debug.Log("Starting FMU cleanup...");
+
+            await Task.Run(() => {
+                using (Py.GIL())
+                {
+                    if (FMI != null)
+                    {
+                        FMI.simulate_free();
+                        FMI = null;
+                    }
+                }
+            });
+
+            UnityEngine.Debug.Log(FMI == null ? "FMU instance is null" : "FMU instance is not null");
+            UnityEngine.Debug.Log("FMU cleanup completed.");
+        }
+        catch (Exception ex)
+        {
+            UnityEngine.Debug.LogError($"Error during FMU cleanup: {ex.Message}");
         }
     }
 }
