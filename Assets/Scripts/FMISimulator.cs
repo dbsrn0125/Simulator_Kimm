@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Linq;
+using ChartAndGraph;
 
 public class FMISimulator : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class FMISimulator : MonoBehaviour
     List<float> set_value;
     List<int> get_key = new List<int>();
     List<double> get_value; // Python: Float => C#: double / 64∫Ò∆Æ
-    List<float> simulationResult;
+    public List<float> simulationResult;
 
     float ray_FL = 1.0f, ray_FR = 1.0f, ray_RL = 1.0f, ray_RR = 1.0f;
 
@@ -45,7 +46,6 @@ public class FMISimulator : MonoBehaviour
         //Debug.Log(Environment.CurrentDirectory);
         device = transform.GetComponent<InputDeviceController>();
         sw = new Stopwatch();
-        
         Dictionary<string, int> vrs;
 
         PythonRunner.EnsureInitialized();
@@ -231,26 +231,26 @@ public class FMISimulator : MonoBehaviour
         simulationResult = new List<float>
         {
             (float) FMI.current_time,
-            (float) get_value[0],
-            (float) get_value[1],
-            (float) get_value[2] * 180.0f / Mathf.PI,
-            (float) get_value[5],
-            (float) get_value[6] * 180.0f / Mathf.PI,
-            (float) get_value[7] * 180.0f / Mathf.PI,
-            (float) get_value[8],
-            (float) get_value[9],
-            (float) get_value[10],
-            (float) get_value[11],
-            (float) get_value[3] * 180.0f / Mathf.PI,
-            (float) get_value[4] * 180.0f / Mathf.PI,
-            (float) get_value[12],
-            (float) get_value[13],
-            (float) get_value[14] * 180.0f / Mathf.PI,
-            (float) get_value[15] * 180.0f / Mathf.PI,
-            (float) get_value[16] * 180.0f / Mathf.PI,
-            (float) get_value[17] * 180.0f / Mathf.PI,
-            (float) get_value[19],
-            (float) get_value[20]
+            (float) get_value[0],//value_x
+            (float) get_value[1],//value_y
+            (float) get_value[2] * 180.0f / Mathf.PI,//value_yaw
+            (float) get_value[5],//value_z
+            (float) get_value[6] * 180.0f / Mathf.PI,//value_roll
+            (float) get_value[7] * 180.0f / Mathf.PI,//value_pitch
+            (float) get_value[8],//list_wheel_z[0]
+            (float) get_value[9],//list_wheel_z[1]
+            (float) get_value[10],//list_wheel_z[2]
+            (float) get_value[11],//list_wheel_z[3]
+            (float) get_value[3] * 180.0f / Mathf.PI,//left_steer
+            (float) get_value[4] * 180.0f / Mathf.PI,//right_steer
+            (float) get_value[12],//value_Vx
+            (float) get_value[13],//value_Vy
+            (float) get_value[14] * 180.0f / Mathf.PI,//list_wheel_roll[0]
+            (float) get_value[15] * 180.0f / Mathf.PI,//list_wheel_roll[1]
+            (float) get_value[16] * 180.0f / Mathf.PI,//list_wheel_roll[2]
+            (float) get_value[17] * 180.0f / Mathf.PI,//list_wheel_roll[3]
+            (float) get_value[19],//body_fixed_vx
+            (float) get_value[20]//body_fixed_vy
         };
 
         transform.GetComponent<CarController>().receiveSimulationResult(simulationResult);
