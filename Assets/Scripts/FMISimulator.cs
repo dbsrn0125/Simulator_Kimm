@@ -197,7 +197,7 @@ public class FMISimulator : MonoBehaviour
         }
 
         sw.Stop(); // 타이머 중지
-        UnityEngine.Debug.Log($"FMI Simulator 처리 시간: {sw.Elapsed.TotalMilliseconds:F3} ms"); // 소수점 3자리까지 출력
+        //UnityEngine.Debug.Log($"FMI Simulator 처리 시간: {sw.Elapsed.TotalMilliseconds:F3} ms"); // 소수점 3자리까지 출력
     }
 
     void Update()
@@ -221,7 +221,7 @@ public class FMISimulator : MonoBehaviour
             {
                 var pythonSetKey = new PyList(set_key.Select(k => new PyInt(k)).ToArray());
                 var pythonSetValue = new PyList(set_value.Select(v => new PyFloat(v)).ToArray());
-                get_value = FMI.simulate_step(0.001, pythonSetKey, pythonSetValue, get_key);
+                get_value = FMI.simulate_step(0.002, pythonSetKey, pythonSetValue, get_key);
             }
         }
         catch(Exception ex)

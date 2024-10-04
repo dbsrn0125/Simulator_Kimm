@@ -31,10 +31,10 @@ public class UpdateChart : MonoBehaviour
         graph.DataSource.EndBatch();
     }
 
-    void FixedUpdate()
+    void Update()
     {
         // step time 증가
-        stepTime += Time.fixedDeltaTime;
+        stepTime += Time.deltaTime;
 
         // y값을 원하는 방식으로 계산 (선형 증가로 가정)
         float yValue = GetYValue(stepTime);

@@ -162,7 +162,7 @@ public class CarController : MonoBehaviour
             }
         }
         sw2.Stop(); // 타이머 중지
-        UnityEngine.Debug.Log($"Transform FixedUpdate 처리 시간: {sw2.Elapsed.TotalMilliseconds:F3} ms"); // 소수점 3자리까지 출력
+        //UnityEngine.Debug.Log($"Transform FixedUpdate 처리 시간: {sw2.Elapsed.TotalMilliseconds:F3} ms"); // 소수점 3자리까지 출력
         
     }
 
@@ -173,7 +173,7 @@ public class CarController : MonoBehaviour
 
     public void receiveSimulationResult(List<float> simulationResult)
     {
-        UnityEngine.Debug.Log("Simulation 진행 중");
+        //UnityEngine.Debug.Log("Simulation 진행 중");
         cur_time = simulationResult[0];
         value_x = simulationResult[1];
         value_y = simulationResult[2];
@@ -210,7 +210,7 @@ public class CarController : MonoBehaviour
         };
 
         sw.Stop(); // 타이머 중지
-        UnityEngine.Debug.Log($"receiveSimulationResult 실행 시간: {sw.Elapsed.TotalMilliseconds:F3} ms"); // 소수점 3자리까지 출력
+        //UnityEngine.Debug.Log($"receiveSimulationResult 실행 시간: {sw.Elapsed.TotalMilliseconds:F3} ms"); // 소수점 3자리까지 출력
 
         sw.Restart();
     }
