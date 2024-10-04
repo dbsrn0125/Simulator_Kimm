@@ -19,7 +19,14 @@ public class UpdateChart : MonoBehaviour
     private List<KeyValuePair<float, float>> chartData = new List<KeyValuePair<float, float>>();  // x, y 값 저장 리스트
     public float timeWindow = 1f;  // x축 길이 10초로 고정
     private bool isTimeWindowReached = false;  // 10초 범위 도달 여부
-
+    void OnValidate()
+    {
+        // Inspector에서 Enum 값이 변경되면 제목을 업데이트
+        if (chartTitle != null)
+        {
+            chartTitle.text = chartDatatype.ToString();
+        }
+    }
     void Start()
     {
         chartTitle.text = chartDatatype.ToString();
@@ -47,7 +54,7 @@ public class UpdateChart : MonoBehaviour
         switch(chartDatatype)
         {
             case ChartDataType.Vx:
-                return (float)FMI.simulationResult[13];
+                return (float)FMI.simulationResult[19];
             case ChartDataType.Roll:
                 return (float)FMI.simulationResult[5];
             case ChartDataType.Pitch:
