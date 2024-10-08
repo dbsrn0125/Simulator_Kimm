@@ -2,6 +2,7 @@ using UnityEngine;
 using ChartAndGraph;
 using System.Collections.Generic;
 using TMPro;
+
 public class UpdateChart : MonoBehaviour
 {
     public enum ChartDataType
@@ -11,14 +12,16 @@ public class UpdateChart : MonoBehaviour
         Pitch,
         Yaw
     }
+
     public TextMeshProUGUI chartTitle;
     public ChartDataType chartDatatype;
     public FMISimulator FMI;
     public GraphChartBase graph;  // 차트 오브젝트 연결
     private float stepTime = 0;
-    private List<KeyValuePair<float, float>> chartData = new List<KeyValuePair<float, float>>();  // x, y 값 저장 리스트
+    private Queue<KeyValuePair<float, float>> chartData = new Queue<KeyValuePair<float, float>>();  // x, y 값 저장 큐
     public float timeWindow = 1f;  // x축 길이 10초로 고정
     private bool isTimeWindowReached = false;  // 10초 범위 도달 여부
+
     void OnValidate()
     {
         // Inspector에서 Enum 값이 변경되면 제목을 업데이트
@@ -27,6 +30,7 @@ public class UpdateChart : MonoBehaviour
             chartTitle.text = chartDatatype.ToString();
         }
     }
+
     void Start()
     {
         chartTitle.text = chartDatatype.ToString();
@@ -43,15 +47,16 @@ public class UpdateChart : MonoBehaviour
         // step time 증가
         stepTime += Time.deltaTime;
 
-        // y값을 원하는 방식으로 계산 (선형 증가로 가정)
+        // y값을 원하는 방식으로 계산
         float yValue = GetYValue(stepTime);
 
         // 데이터 추가 및 갱신
         UpdateChartData(stepTime, yValue);
     }
+
     private float GetYValue(float stepTime)
     {
-        switch(chartDatatype)
+        switch (chartDatatype)
         {
             case ChartDataType.Vx:
                 return (float)FMI.simulationResult[19];
@@ -65,47 +70,26 @@ public class UpdateChart : MonoBehaviour
                 return 0;
         }
     }
+
     void UpdateChartData(float stepTime, float yValue)
     {
         // 새로운 데이터 추가
-        chartData.Add(new KeyValuePair<float, float>(stepTime, yValue));
+        chartData.Enqueue(new KeyValuePair<float, float>(stepTime, yValue));
 
-        // 10초가 지나면 처음 값 제거 (10초 범위 유지)
-        if (stepTime >= timeWindow)
+        // 10초가 넘는 오래된 데이터 제거
+        while (chartData.Count > 0 && chartData.Peek().Key < stepTime - timeWindow)
         {
-            isTimeWindowReached = true;
-        }
-
-        // 10초 이후 오래된 데이터 제거
-        if (isTimeWindowReached)
-        {
-            while (chartData.Count > 0 && chartData[0].Key < stepTime - timeWindow)
-            {
-                chartData.RemoveAt(0);  // 가장 오래된 데이터를 제거
-            }
+            chartData.Dequeue();
         }
 
         // 차트 데이터 갱신
         graph.DataSource.StartBatch();
 
-        // 카테고리 초기화 후 다시 채움
-        graph.DataSource.ClearCategory("Player 1");
-
-        foreach (var dataPoint in chartData)
-        {
-            graph.DataSource.AddPointToCategory("Player 1", dataPoint.Key, dataPoint.Value);
-        }
+        // 기존 데이터를 지우지 않고 마지막에 추가된 데이터만 추가
+        graph.DataSource.AddPointToCategory("Player 1", stepTime, yValue);
 
         // x축의 시작점을 설정하여 왼쪽에서 오른쪽으로 업데이트
-        if (isTimeWindowReached)
-        {
-            graph.DataSource.HorizontalViewOrigin = stepTime - timeWindow;
-        }
-        else
-        {
-            // 초기 10초 동안은 왼쪽에서부터 차곡차곡 쌓기 위해 Origin을 0으로 유지
-            graph.DataSource.HorizontalViewOrigin = 0;
-        }
+        graph.DataSource.HorizontalViewOrigin = stepTime - timeWindow;
 
         graph.DataSource.EndBatch();
     }
