@@ -278,7 +278,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 317484770}
-  - component: {fileID: 317484772}
   - component: {fileID: 317484776}
   - component: {fileID: 317484775}
   - component: {fileID: 317484774}
@@ -323,23 +322,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d08b9496ffe59d4a8745ca75ed3d400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &317484772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 317484769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68632096a27b48a41b1b76eacb2159cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chartTitle: {fileID: 1584800751}
-  chartDatatype: 2
-  FMI: {fileID: 4516470039555921908}
-  graph: {fileID: 317484776}
-  timeWindow: 1
 --- !u!114 &317484773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1396,7 +1378,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 945858477}
-  - component: {fileID: 945858479}
   - component: {fileID: 945858483}
   - component: {fileID: 945858482}
   - component: {fileID: 945858481}
@@ -1441,23 +1422,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d08b9496ffe59d4a8745ca75ed3d400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &945858479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 945858476}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68632096a27b48a41b1b76eacb2159cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chartTitle: {fileID: 1797108187}
-  chartDatatype: 3
-  FMI: {fileID: 4516470039555921908}
-  graph: {fileID: 945858483}
-  timeWindow: 1
 --- !u!114 &945858480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2765,7 +2729,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1683526128}
-  - component: {fileID: 1683526134}
   - component: {fileID: 1683526133}
   - component: {fileID: 1683526132}
   - component: {fileID: 1683526131}
@@ -3065,23 +3028,6 @@ MonoBehaviour:
     top: 0
     right: 0
     bottom: 0
---- !u!114 &1683526134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1683526127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68632096a27b48a41b1b76eacb2159cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chartTitle: {fileID: 1745795021}
-  chartDatatype: 0
-  FMI: {fileID: 4516470039555921908}
-  graph: {fileID: 1683526133}
-  timeWindow: 1
 --- !u!1 &1714401780
 GameObject:
   m_ObjectHideFlags: 0
@@ -3407,7 +3353,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Vx
+  m_text: Pitch
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3629,6 +3575,7 @@ GameObject:
   - component: {fileID: 1979966763}
   - component: {fileID: 1979966765}
   - component: {fileID: 1979966764}
+  - component: {fileID: 1979966766}
   m_Layer: 5
   m_Name: Chart
   m_TagString: Untagged
@@ -3696,6 +3643,31 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1979966762}
   m_CullTransparentMesh: 1
+--- !u!114 &1979966766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1979966762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7189d111928a568429c5ec7360f5f06f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FMI: {fileID: 4516470039555921908}
+  timeWindow: 1
+  charts:
+  - chartTitle: {fileID: 1745795021}
+    chartDatatype: 0
+    graph: {fileID: 1683526133}
+  - chartTitle: {fileID: 1745795021}
+    chartDatatype: 2
+    graph: {fileID: 317484776}
+  - chartTitle: {fileID: 1797108187}
+    chartDatatype: 3
+    graph: {fileID: 945858483}
+  updateInterval: 0.1
 --- !u!1001 &2005949916
 PrefabInstance:
   m_ObjectHideFlags: 0
