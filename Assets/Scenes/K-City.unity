@@ -3708,7 +3708,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Pitch
+  m_text: Vx
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4012,12 +4012,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FMI: {fileID: 4516470039555921908}
   timeWindow: 1
-  updateRate: 5
+  updateRate: 15
   charts:
   - chartTitle: {fileID: 1745795021}
     chartDatatype: 0
     graph: {fileID: 1683526133}
-  - chartTitle: {fileID: 1745795021}
+  - chartTitle: {fileID: 1584800751}
     chartDatatype: 2
     graph: {fileID: 317484776}
   - chartTitle: {fileID: 1797108187}
