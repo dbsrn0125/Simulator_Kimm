@@ -36,6 +36,7 @@ public class FMISimulator : MonoBehaviour
    
     TimeSpan loop_start;
     Stopwatch sw;
+    Dictionary<string, int> vrs;
     private void Awake()
     {
 
@@ -46,7 +47,6 @@ public class FMISimulator : MonoBehaviour
         //Debug.Log(Environment.CurrentDirectory);
         device = transform.GetComponent<InputDeviceController>();
         sw = new Stopwatch();
-        Dictionary<string, int> vrs;
 
         PythonRunner.EnsureInitialized();
         using (Py.GIL())
@@ -194,6 +194,22 @@ public class FMISimulator : MonoBehaviour
         if (initialize_executed)
         {
             Simulation_Do_Step();
+        }
+        else
+        {
+            using(Py.GIL())
+            {
+                FMI.simulate_free();
+                FMI = null;
+                if(FMI==null)
+                {
+                    dynamic FMI_py = Py.Import("custom_input_test");
+                    FMI = FMI_py.FMI_manager(Environment.CurrentDirectory + "\\Assets\\" + "\\fmu\\" + "KIMM_CAR.fmu");
+                    FMI.simulate_init();
+                    vrs = FMI.get_vrs();
+                    initialize_executed = true;
+                }    
+            }
         }
 
         sw.Stop(); // 타이머 중지
