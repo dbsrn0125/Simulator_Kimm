@@ -1346,6 +1346,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e32bc9dc55bab40a9328f5c68ecb15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  topicName: /KIMM/cmd
+  throttle: 0
+  steering_angle: 0
+  brake: 0
+  gear: 0
 --- !u!1 &873388607
 GameObject:
   m_ObjectHideFlags: 0
@@ -5187,9 +5192,9 @@ Transform:
   - {fileID: 1038744678}
   - {fileID: 1658039695}
   - {fileID: 965792484}
+  - {fileID: 843752070}
   - {fileID: 1428211923}
   - {fileID: 658393828}
-  - {fileID: 843752070}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3886023152158989633
