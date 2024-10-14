@@ -11,8 +11,11 @@ public class CarController : MonoBehaviour
     Stopwatch sw2;
 
     public Transform parent_coordinate;
+    public Vector3 initial_position;
+    public Quaternion initial_rotation;
     public List<Transform> WheelsTransform;
     public List<Transform> BodyTransform;
+    public FMISimulator FMI;
     private List<float> rayInfo = new List<float>();
     float[] list_wheel_ray = new float[4] { -0.7354f, -0.7354f, -0.7354f, -0.7354f }; // { 1.05f, 1.05f, 1.05f, 1.05f };
     float[] list_wheel_z = new float[4] { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -41,14 +44,17 @@ public class CarController : MonoBehaviour
     float value_yaw_old = 0;
     float body_fixed_vx = 0, body_fixed_vy = 0;
     int layer_mask;
-
+    bool collision;
+    float resetTimer;
     // Start is called before the first frame update
     void Start()
     {
+        FMI = transform.GetComponent<FMISimulator>();
+        initial_position = new Vector3(0, 0, 0);
         sw = new Stopwatch();
         sw2 = new Stopwatch();
         parent_coordinate.position = new Vector3(-13, 0, -780);
-        layer_mask = 1 << LayerMask.NameToLayer("Terrain");
+        layer_mask = 1 << LayerMask.NameToLayer("Map");
         Transform[] allChildren = GetComponentsInChildren<Transform>();
 
         WheelsTransform = (from i in allChildren
@@ -68,12 +74,25 @@ public class CarController : MonoBehaviour
     void FixedUpdate()
     {
         sw2.Restart();
-        transform.GetComponent<FMISimulator>().receiveRayInfo(rayInfo);
+        if(!collision)
+        {
+            FMI.receiveRayInfo(rayInfo);
+            transform.position = new Vector3(transform.position.x, value_z + suspension_dist, transform.position.z);
+            transform.rotation = Quaternion.Euler(value_pitch, -value_yaw_old, -value_roll);
+            transform.rotation = Quaternion.Euler(value_pitch, -value_yaw, -value_roll);
+            transform.position = initial_position + new Vector3(-value_y, transform.position.y, value_x);
+        }
+        else
+        {
+            resetTimer += Time.deltaTime;
+            if(resetTimer>1)
+            {
+                FMI.initialize_executed = true;
+                collision = false;
+                resetTimer = 0f;
+            }
 
-        transform.position = new Vector3(transform.position.x, value_z + suspension_dist, transform.position.z);
-        transform.rotation = Quaternion.Euler(value_pitch, -value_yaw_old, -value_roll);
-        transform.rotation = Quaternion.Euler(value_pitch, -value_yaw, -value_roll);
-        transform.position = new Vector3(-value_y, transform.position.y, value_x);
+        }
         value_x_old = value_x;
         value_y_old = value_y;
         value_yaw_old = value_yaw;
@@ -213,5 +232,22 @@ public class CarController : MonoBehaviour
         //UnityEngine.Debug.Log($"receiveSimulationResult 실행 시간: {sw.Elapsed.TotalMilliseconds:F3} ms"); // 소수점 3자리까지 출력
 
         sw.Restart();
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        // 충돌한 오브젝트의 레이어가 Map 레이어인지 확인
+        if ((layer_mask & (1 << other.gameObject.layer)) != 0)
+        {
+            UnityEngine.Debug.Log("차가 건물(Map 레이어)에 부딪혔습니다! 초기 위치로 돌아갑니다.");
+            ResetCarPosition();
+        }
+    }
+    private void ResetCarPosition()
+    {
+        // 차량의 위치와 회전을 초기값으로 설정
+        collision = true;
+        FMI.initialize_executed = false;
+        transform.position = initial_position + new Vector3(0,0.75f,0);
+        transform.rotation = initial_rotation;
     }
 }

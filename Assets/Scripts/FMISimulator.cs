@@ -32,7 +32,7 @@ public class FMISimulator : MonoBehaviour
     float[] left_RR = new float[3] { 0.0f, 1.0f, 0.0f };
     float[] left_RL = new float[3] { 0.0f, 1.0f, 0.0f };
 
-    bool initialize_executed = true;
+    public bool initialize_executed = true;
    
     TimeSpan loop_start;
     Stopwatch sw;
@@ -185,7 +185,7 @@ public class FMISimulator : MonoBehaviour
         };
         #endregion
     }
-
+    
     // Update is called once per frame
     void FixedUpdate()
     {
