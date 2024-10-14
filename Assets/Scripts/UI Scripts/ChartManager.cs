@@ -24,8 +24,13 @@ public class ChartManager : MonoBehaviour
     public FMISimulator FMI;
     public float timeWindow = 1f;
     private float stepTime = 0;
+    private float timeSinceLastUpdate = 0f;  // ë§ˆì§€ë§‰ ì—…ë°ì´íŠ¸ ì´í›„ ì‹œê°„
 
-    // ±×·¡ÇÁ Á¤º¸ ÀúÀå ¹è¿­
+    // ì—…ë°ì´íŠ¸ ì£¼ê¸° (30Hz, 1ì´ˆì— 30ë²ˆ ì—…ë°ì´íŠ¸ => 1/30ì´ˆë§ˆë‹¤ ì—…ë°ì´íŠ¸)
+    public float updateRate = 10f;
+    private float updateInterval;
+
+    // ï¿½×·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­
     public ChartInfo[] charts;
 
     private Dictionary<GraphChartBase, Queue<KeyValuePair<float, float>>> chartDataMap =
@@ -33,7 +38,7 @@ public class ChartManager : MonoBehaviour
 
     void OnValidate()
     {
-        // Inspector¿¡¼­ Enum °ªÀÌ º¯°æµÇ¸é Á¦¸ñÀ» ¾÷µ¥ÀÌÆ®
+        // Inspectorï¿½ï¿½ï¿½ï¿½ Enum ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         foreach (var chart in charts)
         {
             if (chart.chartTitle != null)
@@ -45,32 +50,41 @@ public class ChartManager : MonoBehaviour
 
     void Start()
     {
+        updateInterval = 1f / updateRate;
+        
         foreach (var chart in charts)
         {
-            // °¢ Â÷Æ® ÃÊ±âÈ­
+            // ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½Ê±ï¿½È­
             chart.chartTitle.text = chart.chartDatatype.ToString();
 
             chart.graph.DataSource.StartBatch();
-            chart.graph.DataSource.AutomaticHorizontalView = false;  // ÀÚµ¿ È®Àå ²û
-            chart.graph.DataSource.HorizontalViewSize = timeWindow;  // xÃà ¹üÀ§ 10ÃÊ·Î °íÁ¤
-            chart.graph.DataSource.HorizontalViewOrigin = 0;  // Ã³À½¿£ xÃàÀÇ ½ÃÀÛÁ¡À» 0À¸·Î ¼³Á¤
+            chart.graph.DataSource.AutomaticHorizontalView = false;  // ï¿½Úµï¿½ È®ï¿½ï¿½ ï¿½ï¿½
+            chart.graph.DataSource.HorizontalViewSize = timeWindow;  // xï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 10ï¿½Ê·ï¿½ ï¿½ï¿½ï¿½ï¿½
+            chart.graph.DataSource.HorizontalViewOrigin = 0;  // Ã³ï¿½ï¿½ï¿½ï¿½ xï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             chart.graph.DataSource.EndBatch();
 
-            // °¢ ±×·¡ÇÁ¿¡ ÇØ´çÇÏ´Â µ¥ÀÌÅÍ¸¦ ÀúÀåÇÒ Å¥ ÃÊ±âÈ­
+            // ï¿½ï¿½ ï¿½×·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¥ ï¿½Ê±ï¿½È­
             chartDataMap[chart.graph] = new Queue<KeyValuePair<float, float>>();
         }
     }
 
     void Update()
     {
-        // step time Áõ°¡
-        stepTime += Time.deltaTime;
+        // ê²½ê³¼ ì‹œê°„ì„ ëˆ„ì 
+        timeSinceLastUpdate += Time.deltaTime;
 
-        foreach (var chart in charts)
+        // 30Hz ì£¼ê¸°ë¡œ ì—…ë°ì´íŠ¸
+        if (timeSinceLastUpdate >= updateInterval)
         {
-            // y°ªÀ» °è»êÇÏ°í ±×·¡ÇÁ ¾÷µ¥ÀÌÆ®
-            float yValue = GetYValue(chart.chartDatatype, stepTime);
-            UpdateChartData(chart.graph, stepTime, yValue);
+            stepTime += timeSinceLastUpdate;  // ì‹¤ì œ ê²½ê³¼ ì‹œê°„ë§Œí¼ stepTimeì„ ì¦ê°€
+            timeSinceLastUpdate = 0f;  // ëˆ„ì  ì‹œê°„ì„ ì´ˆê¸°í™”
+
+            foreach (var chart in charts)
+            {
+                // yê°’ì„ ê³„ì‚°í•˜ê³  ì°¨íŠ¸ë¥¼ ì—…ë°ì´íŠ¸
+                float yValue = GetYValue(chart.chartDatatype, stepTime);
+                UpdateChartData(chart.graph, stepTime, yValue);
+            }
         }
     }
 
@@ -93,25 +107,25 @@ public class ChartManager : MonoBehaviour
 
     void UpdateChartData(GraphChartBase graph, float stepTime, float yValue)
     {
-        // ±×·¡ÇÁ¿¡ ÇØ´çÇÏ´Â µ¥ÀÌÅÍ Å¥ °¡Á®¿À±â
+        // ï¿½×·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¥ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Queue<KeyValuePair<float, float>> chartData = chartDataMap[graph];
 
-        // »õ·Î¿î µ¥ÀÌÅÍ Ãß°¡
+        // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
         chartData.Enqueue(new KeyValuePair<float, float>(stepTime, yValue));
 
-        // 10ÃÊ°¡ ³Ñ´Â ¿À·¡µÈ µ¥ÀÌÅÍ Á¦°Å
+        // 10ï¿½Ê°ï¿½ ï¿½Ñ´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         while (chartData.Count > 0 && chartData.Peek().Key < stepTime - timeWindow)
         {
             chartData.Dequeue();
         }
 
-        // Â÷Æ® µ¥ÀÌÅÍ °»½Å
+        // ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         graph.DataSource.StartBatch();
 
-        // ±âÁ¸ µ¥ÀÌÅÍ¸¦ Áö¿ìÁö ¾Ê°í ¸¶Áö¸·¿¡ Ãß°¡µÈ µ¥ÀÌÅÍ¸¸ Ãß°¡
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ß°ï¿½
         graph.DataSource.AddPointToCategory("Player 1", stepTime, yValue);
 
-        // xÃàÀÇ ½ÃÀÛÁ¡À» ¼³Á¤ÇÏ¿© ¿ŞÂÊ¿¡¼­ ¿À¸¥ÂÊÀ¸·Î ¾÷µ¥ÀÌÆ®
+        // xï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         graph.DataSource.HorizontalViewOrigin = stepTime - timeWindow;
 
         graph.DataSource.EndBatch();

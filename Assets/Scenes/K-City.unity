@@ -3816,6 +3816,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FMI: {fileID: 4516470039555921908}
   timeWindow: 1
+  updateRate: 5
   charts:
   - chartTitle: {fileID: 1745795021}
     chartDatatype: 0
