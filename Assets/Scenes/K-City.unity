@@ -943,6 +943,72 @@ RectTransform:
   m_AnchoredPosition: {x: 5, y: -0.5}
   m_SizeDelta: {x: -30, y: -3}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &669012448
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3883907446898199881}
+    m_Modifications:
+    - target: {fileID: 3526848927119471297, guid: f0f8681e124442040b39314ccacec637, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526848927119471297, guid: f0f8681e124442040b39314ccacec637, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526848927119471297, guid: f0f8681e124442040b39314ccacec637, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526848927119471297, guid: f0f8681e124442040b39314ccacec637, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526848927119471297, guid: f0f8681e124442040b39314ccacec637, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526848927119471297, guid: f0f8681e124442040b39314ccacec637, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526848927119471297, guid: f0f8681e124442040b39314ccacec637, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526848927119471297, guid: f0f8681e124442040b39314ccacec637, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526848927119471297, guid: f0f8681e124442040b39314ccacec637, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526848927119471297, guid: f0f8681e124442040b39314ccacec637, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526848927119471300, guid: f0f8681e124442040b39314ccacec637, type: 3}
+      propertyPath: m_Name
+      value: IMU_ros
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526848927119471303, guid: f0f8681e124442040b39314ccacec637, type: 3}
+      propertyPath: _topicName
+      value: /KIMM/imu
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f0f8681e124442040b39314ccacec637, type: 3}
+--- !u!4 &669012449 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3526848927119471297, guid: f0f8681e124442040b39314ccacec637, type: 3}
+  m_PrefabInstance: {fileID: 669012448}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &676158228
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2254,6 +2320,88 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1001 &1227621171
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3883907446898199881}
+    m_Modifications:
+    - target: {fileID: 2016422477619200576, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: _frequency
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200578, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: _frequency
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200578, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: _topicName
+      value: /KIMM/image/compressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200579, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: _frequency
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200579, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: _topicName
+      value: /KIMM/info
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200581, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200581, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200581, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200581, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200581, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200581, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200581, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200581, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200581, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200581, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200586, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: m_Name
+      value: RGBCamera_ros
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+--- !u!4 &1227621172 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2016422477619200581, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+  m_PrefabInstance: {fileID: 1227621171}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1232546497
 GameObject:
   m_ObjectHideFlags: 0
@@ -2533,6 +2681,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiPanel: {fileID: 1979966762}
   slideDuration: 0.25
+--- !u!1 &1386123055
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1386123056}
+  - component: {fileID: 1386123057}
+  m_Layer: 0
+  m_Name: Speedometer_ros
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1386123056
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386123055}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 12.581209, y: 2.2342987, z: 91.353065}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3883907446898199881}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1386123057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386123055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c691ce12a2a338f45ac4250eb62c6e8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FMI: {fileID: 4516470039555921908}
+  Vx: 0
+  topicName: /KIMM/speedometer
+  publishRateHz: 10
 --- !u!4 &1428211923 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5955675793856834622, guid: 64ce6a702dcf5c549af554cb9b61453a, type: 3}
@@ -5193,6 +5389,9 @@ Transform:
   - {fileID: 1038744678}
   - {fileID: 1658039695}
   - {fileID: 965792484}
+  - {fileID: 669012449}
+  - {fileID: 1227621172}
+  - {fileID: 1386123056}
   - {fileID: 843752070}
   - {fileID: 1428211923}
   - {fileID: 658393828}
