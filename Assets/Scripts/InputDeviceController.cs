@@ -14,15 +14,13 @@ public class InputDeviceController : MonoBehaviour
     public float brakeInput=0f;
     public float gearInput = 0f;
 
-    private float targetSteeringInput = 0f; // ï¿½ï¿½Ç¥ ï¿½ï¿½Æ¼ï¿½î¸µ ï¿½Ô·ï¿½
-    private float targetThrottleInput = 0f; // ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½
-    private float targetBrakeInput = 0f; // ï¿½ï¿½Ç¥ ï¿½ê·¹ï¿½ï¿½Å© ï¿½Ô·ï¿½
+    private float targetSteeringInput = 0f; // ¸ñÇ¥ ½ºÆ¼¾î¸µ ÀÔ·Â
+    private float targetThrottleInput = 0f; // ¸ñÇ¥ °¡¼Ó ÀÔ·Â
+    private float targetBrakeInput = 0f; // ¸ñÇ¥ ºê·¹ÀÌÅ© ÀÔ·Â
 
-    private bool is_auto = false;
-
-    public float steeringSpeed = 5f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ ï¿½Óµï¿½
-    public float throttleSpeed = 5f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ ï¿½Óµï¿½
-    public float brakeSpeed = 5f; // ï¿½ê·¹ï¿½ï¿½Å© ï¿½ï¿½È­ ï¿½Óµï¿½
+    public float steeringSpeed = 5f; // Á¶ÀÛ º¯È­ ¼Óµµ
+    public float throttleSpeed = 5f; // °¡¼Ó º¯È­ ¼Óµµ
+    public float brakeSpeed = 5f; // ºê·¹ÀÌÅ© º¯È­ ¼Óµµ
     private void Awake()
     {
         carInputActions = new CarInputActions();
@@ -45,104 +43,85 @@ public class InputDeviceController : MonoBehaviour
     void Update()
     {
         bool isGamepadConnected = Gamepad.current!=null;
-        
-        // auto driving toggle
+        //Debug.Log(isGamepadConnected);
         if(isGamepadConnected)
         {
-            // steering wheel ë²„íŠ¼ìœ¼ë¡œ ììœ¨ì£¼í–‰/ë©”ë‰´ì–¼ í† ê¸€s
+            steeringInput = carInputActions.Car.Steering.ReadValue<Vector2>().x;
+            throttleInput = carInputActions.Car.Throttle.ReadValue<float>();
+            brakeInput = carInputActions.Car.Brake.ReadValue<float>();
         }
         else
         {
-            if (Keyboard.current.bKey.isPressed)
+            // Å°º¸µå ÀÔ·ÂÀ» »ç¿ë
+            // ¸ñÇ¥ ÀÔ·Â °ªÀ» ¼³Á¤
+            if (Keyboard.current.aKey.isPressed)
             {
-                is_auto = !is_auto;
+                targetSteeringInput = -1f; // ¿ŞÂÊ
             }
-        }
-        
-        if (is_auto){
-
-        }
-
-        else{
-            if(isGamepadConnected)
+            else if (Keyboard.current.dKey.isPressed)
             {
-                steeringInput = carInputActions.Car.Steering.ReadValue<Vector2>().x;
-                throttleInput = carInputActions.Car.Throttle.ReadValue<float>();
-                brakeInput = carInputActions.Car.Brake.ReadValue<float>();
+                targetSteeringInput = 1f; // ¿À¸¥ÂÊ
             }
             else
             {
-                // steering input
-                if (Keyboard.current.aKey.isPressed)
-                {
-                    targetSteeringInput = -1f; // ï¿½ï¿½ï¿½ï¿½
-                }
-                else if (Keyboard.current.dKey.isPressed)
-                {
-                    targetSteeringInput = 1f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-                }
-                else
-                {
-                    targetSteeringInput = 0f; // ï¿½ß¸ï¿½
-                }
-
-                // throttle
-                if (Keyboard.current.wKey.isPressed)
-                {
-                    targetThrottleInput = 1f; // ï¿½ï¿½ï¿½ï¿½
-                }
-                else
-                {
-                    targetThrottleInput = 0f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-                }
-
-                // brake
-                if (Keyboard.current.sKey.isPressed)
-                {
-                    targetBrakeInput = 1f; // ï¿½ê·¹ï¿½ï¿½Å©
-                }
-                else
-                {
-                    targetBrakeInput = 0f; // ï¿½ê·¹ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½
-                }
-
-                steeringInput = Mathf.Lerp(steeringInput, targetSteeringInput, steeringSpeed * Time.deltaTime);
-                throttleInput = Mathf.Lerp(throttleInput, targetThrottleInput, throttleSpeed * Time.deltaTime);
-                brakeInput = Mathf.Lerp(brakeInput, targetBrakeInput, brakeSpeed * Time.deltaTime);
-
-                // ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-                if (Mathf.Abs(targetSteeringInput) < 0.01f && Mathf.Abs(steeringInput) < 0.01f)
-                {
-                    steeringInput = 0f;
-                }
-                if (Mathf.Abs(targetThrottleInput) < 0.01f && Mathf.Abs(throttleInput) < 0.01f)
-                {
-                    throttleInput = 0f;
-                }
-                if (Mathf.Abs(targetBrakeInput) < 0.01f && Mathf.Abs(brakeInput) < 0.01f)
-                {
-                    brakeInput = 0f;
-                }
+                targetSteeringInput = 0f; // Áß¸³
             }
-            // Gear Input: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
-            bool isGearForward = isGamepadConnected ? carInputActions.Car.GearForward.triggered : Keyboard.current.leftShiftKey.wasPressedThisFrame;
-            bool isGearReverse = isGamepadConnected ? carInputActions.Car.GearReverse.triggered : Keyboard.current.leftCtrlKey.wasPressedThisFrame;
 
-            //Debug.Log($"Steering Input: {steeringInput}");
-            //Debug.Log($"Throttle Input: {throttleInput}");
-            //Debug.Log($"Brake Input: {brakeInput}");
-            if (isGearForward && currentGear != Gear.Forward)
+            if (Keyboard.current.wKey.isPressed)
             {
-                currentGear = Gear.Forward;
-                gearInput = 0;
-                Debug.Log("Gear Shifted to Forward");
+                targetThrottleInput = 1f; // °¡¼Ó
             }
-            else if (isGearReverse && currentGear != Gear.Reverse)
+            else
             {
-                currentGear = Gear.Reverse;
-                gearInput = 1;
-                Debug.Log("Gear Shifted to Reverse");
+                targetThrottleInput = 0f; // °¡¼Ó ÁßÁö
             }
+
+            if (Keyboard.current.sKey.isPressed)
+            {
+                targetBrakeInput = 1f; // ºê·¹ÀÌÅ©
+            }
+            else
+            {
+                targetBrakeInput = 0f; // ºê·¹ÀÌÅ© ÇØÁ¦
+            }
+
+            // ºÎµå·´°Ô º¯È­½ÃÅ°±â
+            steeringInput = Mathf.Lerp(steeringInput, targetSteeringInput, steeringSpeed * Time.deltaTime);
+            throttleInput = Mathf.Lerp(throttleInput, targetThrottleInput, throttleSpeed * Time.deltaTime);
+            brakeInput = Mathf.Lerp(brakeInput, targetBrakeInput, brakeSpeed * Time.deltaTime);
+
+            // ÀÔ·Â °ªÀÌ ¸ñÇ¥ °ª¿¡ °¡±î¿öÁö¸é 0À¸·Î ¼³Á¤
+            if (Mathf.Abs(targetSteeringInput) < 0.01f && Mathf.Abs(steeringInput) < 0.01f)
+            {
+                steeringInput = 0f;
+            }
+            if (Mathf.Abs(targetThrottleInput) < 0.01f && Mathf.Abs(throttleInput) < 0.01f)
+            {
+                throttleInput = 0f;
+            }
+            if (Mathf.Abs(targetBrakeInput) < 0.01f && Mathf.Abs(brakeInput) < 0.01f)
+            {
+                brakeInput = 0f;
+            }
+        }
+        // Gear Input: ÀüÁø ¹× ÈÄÁø È®ÀÎ
+        bool isGearForward = isGamepadConnected ? carInputActions.Car.GearForward.triggered : Keyboard.current.leftShiftKey.wasPressedThisFrame;
+        bool isGearReverse = isGamepadConnected ? carInputActions.Car.GearReverse.triggered : Keyboard.current.leftCtrlKey.wasPressedThisFrame;
+
+        //Debug.Log($"Steering Input: {steeringInput}");
+        //Debug.Log($"Throttle Input: {throttleInput}");
+        //Debug.Log($"Brake Input: {brakeInput}");
+        if (isGearForward && currentGear != Gear.Forward)
+        {
+            currentGear = Gear.Forward;
+            gearInput = 0;
+            Debug.Log("Gear Shifted to Forward");
+        }
+        else if (isGearReverse && currentGear != Gear.Reverse)
+        {
+            currentGear = Gear.Reverse;
+            gearInput = 1;
+            Debug.Log("Gear Shifted to Reverse");
         }
     }
 }
