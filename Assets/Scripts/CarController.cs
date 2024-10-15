@@ -233,14 +233,12 @@ public class CarController : MonoBehaviour
 
         sw.Restart();
     }
-    public static event Action OnCarCollision;
     private void OnTriggerEnter(Collider other)
     {
         // 충돌한 오브젝트의 레이어가 Map 레이어인지 확인
         if ((layer_mask & (1 << other.gameObject.layer)) != 0)
         {
             UnityEngine.Debug.Log("차가 건물(Map 레이어)에 부딪혔습니다! 초기 위치로 돌아갑니다.");
-            OnCarCollision.Invoke();
             ResetCarPosition();
         }
     }
