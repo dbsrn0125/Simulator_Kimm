@@ -32,7 +32,7 @@ public class CarController : MonoBehaviour
     Vector3 left_RL = new Vector3(-1, 0, 0);
 
     Quaternion parent_rotation_inv = new Quaternion(0, 0, 0, 1);
-
+    public static event Action OnCarCollision;
     public float left_steer = 0.0f, right_steer = 0.0f;
     readonly float wheelRadius = 0.3677536f;
     float suspension_dist = 0.4177536f;
@@ -239,6 +239,7 @@ public class CarController : MonoBehaviour
         if ((layer_mask & (1 << other.gameObject.layer)) != 0)
         {
             UnityEngine.Debug.Log("차가 건물(Map 레이어)에 부딪혔습니다! 초기 위치로 돌아갑니다.");
+            OnCarCollision?.Invoke();
             ResetCarPosition();
         }
     }
