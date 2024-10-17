@@ -10621,7 +10621,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 843752070}
-  - component: {fileID: 843752071}
   m_Layer: 0
   m_Name: CarCmd_ros
   m_TagString: Untagged
@@ -10640,27 +10639,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3883907446898199881}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &843752071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 843752069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4e32bc9dc55bab40a9328f5c68ecb15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  topicName: /KIMM/cmd
-  throttle: 0
-  steering_angle: 0
-  brake: 0
-  gear: 0
 --- !u!1 &846693559 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4803237856312707421, guid: 05cbf214a89bca6478faaf739af6a0df, type: 3}
@@ -23948,6 +23930,7 @@ GameObject:
   - component: {fileID: 4516470039555921911}
   - component: {fileID: 4516470039555921912}
   - component: {fileID: 4516470039555921913}
+  - component: {fileID: 4516470039555921914}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -24078,6 +24061,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4516470039555921914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4516470039555921907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e32bc9dc55bab40a9328f5c68ecb15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topicName: /KIMM/cmd
+  throttle: 0
+  steering_angle: 0
+  brake: 0
+  gear: 0
 --- !u!23 &6387904847284818998
 MeshRenderer:
   m_ObjectHideFlags: 0

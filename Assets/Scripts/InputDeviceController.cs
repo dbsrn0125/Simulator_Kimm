@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 public class InputDeviceController : MonoBehaviour
 {
     private CarInputActions carInputActions;
+    private CarCmd_ros autoCmd;
+
     public enum Gear { Neutral, Forward, Reverse}
     public Gear currentGear = Gear.Neutral;
 
@@ -39,6 +41,7 @@ public class InputDeviceController : MonoBehaviour
     void Start()
     {
         Debug.Log($"Current Gear : {currentGear}");
+        autoCmd = transform.GetComponent<CarCmd_ros>();
     }
 
     // Update is called once per frame
@@ -55,12 +58,27 @@ public class InputDeviceController : MonoBehaviour
         {
             if (Keyboard.current.bKey.isPressed)
             {
-                is_auto = !is_auto;
+                is_auto = true;
+            }
+            else if (Keyboard.current.nKey.isPressed)
+            {
+                is_auto = false;
             }
         }
         
         if (is_auto){
+            steeringInput = autoCmd.steering_angle;
+            throttleInput = autoCmd.throttle;
+            brakeInput = autoCmd.brake;
             
+            if (autoCmd.gear == 0){
+                currentGear = Gear.Forward;
+                gearInput = 0;
+            }
+            else{
+                currentGear = Gear.Reverse;
+                gearInput = 1;
+            }
         }
 
         else{

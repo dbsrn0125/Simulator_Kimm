@@ -2,7 +2,7 @@ using UnityEngine;
 using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Geometry;
 
-public class TwistSubscriber : MonoBehaviour
+public class CarCmd_ros : MonoBehaviour
 {
     private ROSConnection ros;
     public string topicName = "/KIMM/cmd";
