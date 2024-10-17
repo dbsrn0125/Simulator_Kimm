@@ -10612,37 +10612,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1589.279, y: 3204.586, z: 3393.275}
   m_Center: {x: -0.005859375, y: 0.01139632, z: 1096.3594}
---- !u!1 &843752069
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 843752070}
-  m_Layer: 0
-  m_Name: CarCmd_ros
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &843752070
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 843752069}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 3883907446898199881}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &846693559 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4803237856312707421, guid: 05cbf214a89bca6478faaf739af6a0df, type: 3}
@@ -23867,7 +23836,6 @@ Transform:
   - {fileID: 669012449}
   - {fileID: 1227621172}
   - {fileID: 1386123056}
-  - {fileID: 843752070}
   - {fileID: 1428211923}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
