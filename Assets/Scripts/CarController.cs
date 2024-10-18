@@ -100,7 +100,6 @@ public class CarController : MonoBehaviour
         foreach (Transform t in WheelsTransform)
         {
             RaycastHit[] wheelHits = Physics.RaycastAll(t.position, -transform.up, wheelRadius + 10.05f, layer_mask);
-
             if (t.name == "WheelFL")
             {
                 //Debug.Log("FrontLeftWheel");

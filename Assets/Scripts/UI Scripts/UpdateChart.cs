@@ -20,7 +20,7 @@ public class UpdateChart : MonoBehaviour
     private float stepTime = 0;
     private Queue<KeyValuePair<float, float>> chartData = new Queue<KeyValuePair<float, float>>();  // x, y 값 저장 큐
     public float timeWindow = 1f;  // x축 길이 10초로 고정
-    private bool isTimeWindowReached = false;  // 10초 범위 도달 여부
+    //private bool isTimeWindowReached = false;  // 10초 범위 도달 여부
 
     void OnValidate()
     {
