@@ -17,7 +17,15 @@ public class InfoPanelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        modeText.text = "Mode: " + IDC.is_auto;
+        if(IDC.is_auto)
+        {
+            modeText.text = "Mode : Auto ";
+
+        }
+        else
+        {
+            modeText.text = "Mode : Manual";
+        }
         gearText.text = "Gear: " + IDC.currentGear;
     }
 }

@@ -579,6 +579,33 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -1030356583233339209, guid: 05cbf214a89bca6478faaf739af6a0df, type: 3}
+--- !u!1 &67751221 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3364591842603832965, guid: 05cbf214a89bca6478faaf739af6a0df, type: 3}
+  m_PrefabInstance: {fileID: 689954972}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &67751225
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67751221}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3197884814882911124, guid: 05cbf214a89bca6478faaf739af6a0df, type: 3}
 --- !u!1 &71967409 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7097682837741194592, guid: 05cbf214a89bca6478faaf739af6a0df, type: 3}
@@ -10212,6 +10239,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3364591842603832965, guid: 05cbf214a89bca6478faaf739af6a0df, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3371605015040834046, guid: 05cbf214a89bca6478faaf739af6a0df, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -12373,6 +12404,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4838596991419884128, guid: 05cbf214a89bca6478faaf739af6a0df, type: 3}
       insertIndex: -1
       addedObject: {fileID: 117122778}
+    - targetCorrespondingSourceObject: {fileID: 3364591842603832965, guid: 05cbf214a89bca6478faaf739af6a0df, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 67751225}
     - targetCorrespondingSourceObject: {fileID: 8967565808833989362, guid: 05cbf214a89bca6478faaf739af6a0df, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1907276085}
