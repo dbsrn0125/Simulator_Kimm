@@ -9,6 +9,7 @@ public class CollisionUIController : MonoBehaviour
     public TextMeshProUGUI collisionMessageText;
     public float fadeDuration = 1f;
     public float displayDuration = 2f;
+    private CarController carController;
 
     private void OnEnable()
     {
@@ -27,6 +28,7 @@ public class CollisionUIController : MonoBehaviour
         // 초기 상태로 UI 비활성화
         redOverlayCanvasGroup.alpha = 0;
         collisionMessageText.gameObject.SetActive(false);
+        carController = FindObjectOfType<CarController>();
     }
 
     private void ShowCollisionUI()
@@ -52,6 +54,9 @@ public class CollisionUIController : MonoBehaviour
 
         // 메시지 비활성화
         collisionMessageText.gameObject.SetActive(false);
+
+        // UI 처리가 끝난 후에 자동차 초기 위치로 리셋
+        carController.ResetCarPosition();
     }
 
     private IEnumerator FadeIn()

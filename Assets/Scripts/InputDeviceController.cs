@@ -20,7 +20,7 @@ public class InputDeviceController : MonoBehaviour
     private float targetThrottleInput = 0f; // ��ǥ ���� �Է�
     private float targetBrakeInput = 0f; // ��ǥ �극��ũ �Է�
 
-    private bool is_auto = false;
+    public bool is_auto = false;
 
     public float steeringSpeed = 5f; // ���� ��ȭ �ӵ�
     public float throttleSpeed = 5f; // ���� ��ȭ �ӵ�

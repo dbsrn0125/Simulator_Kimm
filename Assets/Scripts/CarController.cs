@@ -81,16 +81,17 @@ public class CarController : MonoBehaviour
             transform.rotation = Quaternion.Euler(value_pitch, -value_yaw_old, -value_roll);
             transform.rotation = Quaternion.Euler(value_pitch, -value_yaw, -value_roll);
             transform.position = initial_position + new Vector3(-value_y, transform.position.y, value_x);
+
         }
         else
         {
-            resetTimer += Time.deltaTime;
-            if(resetTimer>1)
-            {
-                FMI.initialize_executed = true;
-                collision = false;
-                resetTimer = 0f;
-            }
+            //resetTimer += Time.deltaTime;
+            //if (resetTimer > 1)
+            //{
+            //    FMI.initialize_executed = true;
+            //    collision = false;
+            //    resetTimer = 0f;
+            //}
 
         }
         value_x_old = value_x;
@@ -99,7 +100,6 @@ public class CarController : MonoBehaviour
         foreach (Transform t in WheelsTransform)
         {
             RaycastHit[] wheelHits = Physics.RaycastAll(t.position, -transform.up, wheelRadius + 10.05f, layer_mask);
-
             if (t.name == "WheelFL")
             {
                 //Debug.Log("FrontLeftWheel");
@@ -233,22 +233,31 @@ public class CarController : MonoBehaviour
 
         sw.Restart();
     }
+    private bool hasCollided = false;
     private void OnTriggerEnter(Collider other)
     {
+        if (hasCollided) return;
         // 충돌한 오브젝트의 레이어가 Map 레이어인지 확인
         if ((layer_mask & (1 << other.gameObject.layer)) != 0)
         {
-            UnityEngine.Debug.Log("차가 건물(Map 레이어)에 부딪혔습니다! 초기 위치로 돌아갑니다.");
+            UnityEngine.Debug.Log("차가 건물(Map 레이어)에 부딪혔습니다! 충돌좌표 :"+ transform.position);
+            FMI.simulationResult.Clear();
             OnCarCollision?.Invoke();
-            ResetCarPosition();
+            collision = true;
+            hasCollided = true;
+            //ResetCarPosition();
         }
     }
-    private void ResetCarPosition()
+    public void ResetCarPosition()
     {
         // 차량의 위치와 회전을 초기값으로 설정
-        collision = true;
         FMI.initialize_executed = false;
-        transform.position = initial_position + new Vector3(0,0.75f,0);
-        transform.rotation = initial_rotation;
+        initial_position = new Vector3(transform.position.x - transform.forward.x * 5, 0, transform.position.z - transform.forward.z * 5);
+        value_y = 0; value_x = 0;
+        collision = false;
+        UnityEngine.Debug.Log("transform.position : " + transform.position + "transform.forward : " + transform.forward);
+        UnityEngine.Debug.Log(initial_position);
+        //transform.rotation = initial_rotation;             
+        hasCollided = false;
     }
 }

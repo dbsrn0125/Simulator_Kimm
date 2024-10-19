@@ -44,6 +44,7 @@ public class FMISimulator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        simulationResult = new List<float>(new float[21]);
         //Debug.Log(Environment.CurrentDirectory);
         device = transform.GetComponent<InputDeviceController>();
         sw = new Stopwatch();
@@ -54,7 +55,7 @@ public class FMISimulator : MonoBehaviour
             dynamic FMI_py = Py.Import("custom_input_test");
             FMI = FMI_py.FMI_manager(Environment.CurrentDirectory + "\\Assets\\" + "\\fmu\\" + "KIMM_CAR.fmu");
             FMI.simulate_init();
-            vrs = FMI.get_vrs();
+            vrs = FMI.get_vrs();           
         }
         #region variables
 
@@ -207,7 +208,7 @@ public class FMISimulator : MonoBehaviour
                     FMI = FMI_py.FMI_manager(Environment.CurrentDirectory + "\\Assets\\" + "\\fmu\\" + "KIMM_CAR.fmu");
                     FMI.simulate_init();
                     vrs = FMI.get_vrs();
-                    initialize_executed = true;
+                    initialize_executed = true;                
                 }    
             }
         }
@@ -244,32 +245,57 @@ public class FMISimulator : MonoBehaviour
         {
             UnityEngine.Debug.LogError($"Error during simulation step: {ex.Message}");
         }
-        simulationResult = new List<float>
+        //simulationResult = new List<float>
+        //{
+        //    (float) FMI.current_time,
+        //    (float) get_value[0],//value_x
+        //    (float) get_value[1],//value_y
+        //    (float) get_value[2] * 180.0f / Mathf.PI,//value_yaw
+        //    (float) get_value[5],//value_z
+        //    (float) get_value[6] * 180.0f / Mathf.PI,//value_roll
+        //    (float) get_value[7] * 180.0f / Mathf.PI,//value_pitch
+        //    (float) get_value[8],//list_wheel_z[0]
+        //    (float) get_value[9],//list_wheel_z[1]
+        //    (float) get_value[10],//list_wheel_z[2]
+        //    (float) get_value[11],//list_wheel_z[3]
+        //    (float) get_value[3] * 180.0f / Mathf.PI,//left_steer
+        //    (float) get_value[4] * 180.0f / Mathf.PI,//right_steer
+        //    (float) get_value[12],//value_Vx
+        //    (float) get_value[13],//value_Vy
+        //    (float) get_value[14] * 180.0f / Mathf.PI,//list_wheel_roll[0]
+        //    (float) get_value[15] * 180.0f / Mathf.PI,//list_wheel_roll[1]
+        //    (float) get_value[16] * 180.0f / Mathf.PI,//list_wheel_roll[2]
+        //    (float) get_value[17] * 180.0f / Mathf.PI,//list_wheel_roll[3]
+        //    (float) get_value[19],//body_fixed_vx
+        //    (float) get_value[20]//body_fixed_vy
+        //};
+        if(simulationResult.Count==0)
         {
-            (float) FMI.current_time,
-            (float) get_value[0],//value_x
-            (float) get_value[1],//value_y
-            (float) get_value[2] * 180.0f / Mathf.PI,//value_yaw
-            (float) get_value[5],//value_z
-            (float) get_value[6] * 180.0f / Mathf.PI,//value_roll
-            (float) get_value[7] * 180.0f / Mathf.PI,//value_pitch
-            (float) get_value[8],//list_wheel_z[0]
-            (float) get_value[9],//list_wheel_z[1]
-            (float) get_value[10],//list_wheel_z[2]
-            (float) get_value[11],//list_wheel_z[3]
-            (float) get_value[3] * 180.0f / Mathf.PI,//left_steer
-            (float) get_value[4] * 180.0f / Mathf.PI,//right_steer
-            (float) get_value[12],//value_Vx
-            (float) get_value[13],//value_Vy
-            (float) get_value[14] * 180.0f / Mathf.PI,//list_wheel_roll[0]
-            (float) get_value[15] * 180.0f / Mathf.PI,//list_wheel_roll[1]
-            (float) get_value[16] * 180.0f / Mathf.PI,//list_wheel_roll[2]
-            (float) get_value[17] * 180.0f / Mathf.PI,//list_wheel_roll[3]
-            (float) get_value[19],//body_fixed_vx
-            (float) get_value[20]//body_fixed_vy
-        };
-
+            simulationResult = new List<float>(new float[21]);
+        }
+        simulationResult[0] = (float)FMI.current_time;
+        simulationResult[1] = (float)get_value[0];
+        simulationResult[2] = (float)get_value[1];
+        simulationResult[3] = (float)get_value[2] * 180.0f / Mathf.PI;
+        simulationResult[4] = (float)get_value[5];
+        simulationResult[5] = (float)get_value[6] * 180.0f / Mathf.PI;
+        simulationResult[6] = (float)get_value[7] * 180.0f / Mathf.PI;
+        simulationResult[7] = (float)get_value[8];
+        simulationResult[8] = (float)get_value[9];
+        simulationResult[9] = (float)get_value[10];
+        simulationResult[10] = (float)get_value[11];
+        simulationResult[11] = (float)get_value[3] * 180.0f / Mathf.PI;
+        simulationResult[12] = (float)get_value[4] * 180.0f / Mathf.PI;
+        simulationResult[13] = (float)get_value[12];
+        simulationResult[14] = (float)get_value[13];
+        simulationResult[15] = (float)get_value[14] * 180.0f / Mathf.PI;
+        simulationResult[16] = (float)get_value[15] * 180.0f / Mathf.PI;
+        simulationResult[17] = (float)get_value[16] * 180.0f / Mathf.PI;
+        simulationResult[18] = (float)get_value[17] * 180.0f / Mathf.PI;
+        simulationResult[19] = (float)get_value[19];
+        simulationResult[20] = (float)get_value[20];
         transform.GetComponent<CarController>().receiveSimulationResult(simulationResult);
+        //simulationResult.Clear();
     }
 
     public void receiveRayInfo(List<float> rayInfo)
