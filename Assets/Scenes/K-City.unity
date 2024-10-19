@@ -19085,6 +19085,10 @@ PrefabInstance:
       propertyPath: _frequency
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200576, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: _resolution.y
+      value: 360
+      objectReference: {fileID: 0}
     - target: {fileID: 2016422477619200578, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
       propertyPath: _frequency
       value: 30
@@ -19092,6 +19096,10 @@ PrefabInstance:
     - target: {fileID: 2016422477619200578, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
       propertyPath: _topicName
       value: /KIMM/image/compressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016422477619200578, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
+      propertyPath: _serializer.quality
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2016422477619200579, guid: ae5d0d7848c9e3c46a8ba3ca8b9f3413, type: 3}
       propertyPath: _frequency
