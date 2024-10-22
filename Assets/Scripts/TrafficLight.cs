@@ -40,7 +40,7 @@ public class TrafficLight : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (timer < 1.5f)
+        if (timer < 10f)
         {
             RedLight_L.enabled = false;
             YellowLight_L.enabled = false;
@@ -48,28 +48,28 @@ public class TrafficLight : MonoBehaviour
             GreenLight_R.enabled = true;
         }
 
-        else if (timer < 2.0f)
+        else if (timer < 13f)
         {
             RedLight_L.enabled = false;
             YellowLight_L.enabled = true;
             GreenLight_L.enabled = false;
             GreenLight_R.enabled = false;
         }
-        else if (timer < 3.5f)
+        else if (timer < 23f)
         {
             RedLight_L.enabled = true;
             YellowLight_L.enabled = false;
             GreenLight_L.enabled = true;
             GreenLight_R.enabled = false;
         }
-        else if (timer < 4.0f)
+        else if (timer < 26f)
         {
             RedLight_L.enabled = false;
             YellowLight_L.enabled = true;
             GreenLight_L.enabled = false;
             GreenLight_R.enabled = false;
         }
-        else if (timer < 6.0f)
+        else if (timer < 36f)
         {
             RedLight_L.enabled = true;
             YellowLight_L.enabled = false;
