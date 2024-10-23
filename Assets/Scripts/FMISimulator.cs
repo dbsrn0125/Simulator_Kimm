@@ -18,7 +18,7 @@ public class FMISimulator : MonoBehaviour
     List<float> set_value;
     List<int> get_key = new List<int>();
     List<double> get_value; // Python: Float => C#: double / 64∫Ò∆Æ
-    public List<float> simulationResult;
+    public float[] simulationResult = new float[21];
 
     float ray_FL = 1.0f, ray_FR = 1.0f, ray_RL = 1.0f, ray_RR = 1.0f;
 
@@ -44,7 +44,6 @@ public class FMISimulator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        simulationResult = new List<float>(new float[21]);
         //Debug.Log(Environment.CurrentDirectory);
         device = transform.GetComponent<InputDeviceController>();
         sw = new Stopwatch();
@@ -269,9 +268,9 @@ public class FMISimulator : MonoBehaviour
         //    (float) get_value[19],//body_fixed_vx
         //    (float) get_value[20]//body_fixed_vy
         //};
-        if(simulationResult.Count==0)
+        if(simulationResult.Length==0)
         {
-            simulationResult = new List<float>(new float[21]);
+            simulationResult = new float[21];
         }
         simulationResult[0] = (float)FMI.current_time;
         simulationResult[1] = (float)get_value[0];
@@ -298,7 +297,7 @@ public class FMISimulator : MonoBehaviour
         //simulationResult.Clear();
     }
 
-    public void receiveRayInfo(List<float> rayInfo)
+    public void receiveRayInfo(float[] rayInfo)
     {
         //Debug.Log("Receiveing Ray Info");
         ray_FL = rayInfo[0];

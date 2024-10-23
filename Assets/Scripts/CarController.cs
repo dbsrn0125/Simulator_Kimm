@@ -16,7 +16,7 @@ public class CarController : MonoBehaviour
     public List<Transform> WheelsTransform;
     public List<Transform> BodyTransform;
     public FMISimulator FMI;
-    private List<float> rayInfo = new List<float>();
+    private float[] rayInfo = new float[28];
     float[] list_wheel_ray = new float[4] { -0.7354f, -0.7354f, -0.7354f, -0.7354f }; // { 1.05f, 1.05f, 1.05f, 1.05f };
     float[] list_wheel_z = new float[4] { 0.0f, 0.0f, 0.0f, 0.0f };
     float[] list_wheel_roll = new float[4] { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -45,7 +45,6 @@ public class CarController : MonoBehaviour
     float body_fixed_vx = 0, body_fixed_vy = 0;
     int layer_mask;
     bool collision;
-    float resetTimer;
     // Start is called before the first frame update
     void Start()
     {
@@ -180,7 +179,7 @@ public class CarController : MonoBehaviour
         return q * v; // Unity의 내장 함수 사용
     }
 
-    public void receiveSimulationResult(List<float> simulationResult)
+    public void receiveSimulationResult(float[] simulationResult)
     {
         //UnityEngine.Debug.Log("Simulation 진행 중");
         cur_time = simulationResult[0];
@@ -205,18 +204,55 @@ public class CarController : MonoBehaviour
         body_fixed_vx = simulationResult[19];
         body_fixed_vy = simulationResult[20];
 
-        rayInfo = new List<float>
-        {
-            list_wheel_ray[0], list_wheel_ray[1], list_wheel_ray[2], list_wheel_ray[3],
-            forward_FL.z, -forward_FL.x, forward_FL.y,
-            forward_FR.z, -forward_FR.x, forward_FR.y,
-            forward_RR.z, -forward_RR.x, forward_RR.y,
-            forward_RL.z, -forward_RL.x, forward_RL.y,
-            left_FL.z, -left_FL.x, left_FL.y,
-            left_FR.z, -left_FR.x, left_FR.y,
-            left_RR.z, -left_RR.x, left_RR.y,
-            left_RL.z, -left_RL.x, left_RL.y
-        };
+        rayInfo[0] = list_wheel_ray[0];
+        rayInfo[1] = list_wheel_ray[1];
+        rayInfo[2] = list_wheel_ray[2];
+        rayInfo[3] = list_wheel_ray[3];
+
+        rayInfo[4] = forward_FL.z;
+        rayInfo[5] = -forward_FL.x;
+        rayInfo[6] = forward_FL.y;
+
+        rayInfo[7] = forward_FR.z;
+        rayInfo[8] = -forward_FR.x;
+        rayInfo[9] = forward_FR.y;
+
+        rayInfo[10] = forward_RR.z;
+        rayInfo[11] = -forward_RR.x;
+        rayInfo[12] = forward_RR.y;
+
+        rayInfo[13] = forward_RL.z;
+        rayInfo[14] = -forward_RL.x;
+        rayInfo[15] = forward_RL.y;
+
+        rayInfo[16] = left_FL.z;
+        rayInfo[17] = -left_FL.x;
+        rayInfo[18] = left_FL.y;
+
+        rayInfo[19] = left_FR.z;
+        rayInfo[20] = -left_FR.x;
+        rayInfo[21] = left_FR.y;
+
+        rayInfo[22] = left_RR.z;
+        rayInfo[23] = -left_RR.x;
+        rayInfo[24] = left_RR.y;
+
+        rayInfo[25] = left_RL.z;
+        rayInfo[26] = -left_RL.x;
+        rayInfo[27] = left_RL.y;
+
+        //rayInfo = new List<float>
+        //{
+        //    list_wheel_ray[0], list_wheel_ray[1], list_wheel_ray[2], list_wheel_ray[3],
+        //    forward_FL.z, -forward_FL.x, forward_FL.y,
+        //    forward_FR.z, -forward_FR.x, forward_FR.y,
+        //    forward_RR.z, -forward_RR.x, forward_RR.y,
+        //    forward_RL.z, -forward_RL.x, forward_RL.y,
+        //    left_FL.z, -left_FL.x, left_FL.y,
+        //    left_FR.z, -left_FR.x, left_FR.y,
+        //    left_RR.z, -left_RR.x, left_RR.y,
+        //    left_RL.z, -left_RL.x, left_RL.y
+        //};
 
         sw.Stop(); // 타이머 중지
         //UnityEngine.Debug.Log($"receiveSimulationResult 실행 시간: {sw.Elapsed.TotalMilliseconds:F3} ms"); // 소수점 3자리까지 출력
@@ -231,11 +267,10 @@ public class CarController : MonoBehaviour
         if ((layer_mask & (1 << other.gameObject.layer)) != 0)
         {
             UnityEngine.Debug.Log("차가 건물(Map 레이어)에 부딪혔습니다! 충돌좌표 :"+ transform.position);
-            FMI.simulationResult.Clear();
+            //FMI.simulationResult.Clear();
             OnCarCollision?.Invoke();
             collision = true;
             hasCollided = true;
-            //ResetCarPosition();
         }
     }
     public void CollisionResetCarPosition()
@@ -244,10 +279,7 @@ public class CarController : MonoBehaviour
         FMI.initialize_executed = false;
         initial_position = new Vector3(transform.position.x - transform.forward.x * 5, 0, transform.position.z - transform.forward.z * 5);
         value_y = 0; value_x = 0;
-        collision = false;
-        UnityEngine.Debug.Log("transform.position : " + transform.position + "transform.forward : " + transform.forward);
-        UnityEngine.Debug.Log(initial_position);
-        //transform.rotation = initial_rotation;             
+        collision = false;           
         hasCollided = false;
     }
 
