@@ -56,7 +56,7 @@ public class CollisionUIController : MonoBehaviour
         collisionMessageText.gameObject.SetActive(false);
 
         // UI 처리가 끝난 후에 자동차 초기 위치로 리셋
-        carController.ResetCarPosition();
+        carController.CollisionResetCarPosition();
     }
 
     private IEnumerator FadeIn()

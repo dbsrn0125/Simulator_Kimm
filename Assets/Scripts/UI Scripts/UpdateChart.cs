@@ -12,7 +12,7 @@ public class UpdateChart : MonoBehaviour
         Pitch,
         Yaw
     }
-
+    string valuetype;
     public TextMeshProUGUI chartTitle;
     public ChartDataType chartDatatype;
     public FMISimulator FMI;
@@ -27,7 +27,7 @@ public class UpdateChart : MonoBehaviour
         // Inspector에서 Enum 값이 변경되면 제목을 업데이트
         if (chartTitle != null)
         {
-            chartTitle.text = chartDatatype.ToString();
+            chartTitle.text = chartDatatype.ToString()+valuetype;
         }
     }
 
@@ -59,12 +59,16 @@ public class UpdateChart : MonoBehaviour
         switch (chartDatatype)
         {
             case ChartDataType.Vx:
+                valuetype = "[m/s]";
                 return (float)FMI.simulationResult[19];
             case ChartDataType.Roll:
+                valuetype = "[°]";
                 return (float)FMI.simulationResult[5];
             case ChartDataType.Pitch:
+                valuetype = "[°]";
                 return (float)FMI.simulationResult[6];
             case ChartDataType.Yaw:
+                valuetype = "[°]";
                 return (float)FMI.simulationResult[3];
             default:
                 return 0;

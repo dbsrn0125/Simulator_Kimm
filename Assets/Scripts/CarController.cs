@@ -83,17 +83,7 @@ public class CarController : MonoBehaviour
             transform.position = initial_position + new Vector3(-value_y, transform.position.y, value_x);
 
         }
-        else
-        {
-            //resetTimer += Time.deltaTime;
-            //if (resetTimer > 1)
-            //{
-            //    FMI.initialize_executed = true;
-            //    collision = false;
-            //    resetTimer = 0f;
-            //}
 
-        }
         value_x_old = value_x;
         value_y_old = value_y;
         value_yaw_old = value_yaw;
@@ -248,7 +238,7 @@ public class CarController : MonoBehaviour
             //ResetCarPosition();
         }
     }
-    public void ResetCarPosition()
+    public void CollisionResetCarPosition()
     {
         // 차량의 위치와 회전을 초기값으로 설정
         FMI.initialize_executed = false;
@@ -259,5 +249,10 @@ public class CarController : MonoBehaviour
         UnityEngine.Debug.Log(initial_position);
         //transform.rotation = initial_rotation;             
         hasCollided = false;
+    }
+
+    public void ResetCarPosition()
+    {
+        FMI.initialize_executed = false;
     }
 }

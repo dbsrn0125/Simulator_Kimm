@@ -47,6 +47,10 @@ public class InputDeviceController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            transform.GetComponent<CarController>().ResetCarPosition();
+        }
         bool isGamepadConnected = Gamepad.current!=null;
         
         // auto driving toggle
