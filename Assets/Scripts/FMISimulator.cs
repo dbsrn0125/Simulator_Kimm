@@ -15,7 +15,8 @@ public class FMISimulator : MonoBehaviour
     public float realCurrentTime = 0f;
     InputDeviceController device;
     List<int> set_key;
-    List<float> set_value;
+    //List<float> set_value = new List<float>();
+    float[] set_value = new float[32];
     List<int> get_key = new List<int>();
     List<double> get_value; // Python: Float => C#: double / 64∫Ò∆Æ
     public float[] simulationResult = new float[21];
@@ -222,15 +223,47 @@ public class FMISimulator : MonoBehaviour
 
     private void Simulation_Do_Step()
     {
-        set_value = new List<float>
-        {
-            device.throttleInput, device.brakeInput, device.gearInput, -device.steeringInput,
-            ray_FL, ray_FR, ray_RR, ray_RL,
-            forward_FL[0], forward_FL[1], forward_FL[2], left_FL[0], left_FL[1], left_FL[2],
-            forward_FR[0], forward_FR[1], forward_FR[2], left_FR[0], left_FR[1], left_FR[2],
-            forward_RR[0], forward_RR[1], forward_RR[2], left_RR[0], left_RR[1], left_RR[2],
-            forward_RL[0], forward_RL[1], forward_RL[2], left_RL[0], left_RL[1], left_RL[2]
-        };
+        //set_value = new List<float>
+        //{
+        //    device.throttleInput, device.brakeInput, device.gearInput, -device.steeringInput,
+        //    ray_FL, ray_FR, ray_RR, ray_RL,
+        //    forward_FL[0], forward_FL[1], forward_FL[2], left_FL[0], left_FL[1], left_FL[2],
+        //    forward_FR[0], forward_FR[1], forward_FR[2], left_FR[0], left_FR[1], left_FR[2],
+        //    forward_RR[0], forward_RR[1], forward_RR[2], left_RR[0], left_RR[1], left_RR[2],
+        //    forward_RL[0], forward_RL[1], forward_RL[2], left_RL[0], left_RL[1], left_RL[2]
+        //};
+        set_value[0] = device.throttleInput;
+        set_value[1] = device.brakeInput;
+        set_value[2] = device.gearInput;
+        set_value[3] = -device.steeringInput;
+        set_value[4] = ray_FL;
+        set_value[5] = ray_FR;
+        set_value[6] = ray_RR;
+        set_value[7] = ray_RL;
+        set_value[8] = forward_FL[0];
+        set_value[9] = forward_FL[1];
+        set_value[10] = forward_FL[2];
+        set_value[11] = left_FL[0];
+        set_value[12] = left_FL[1];
+        set_value[13] = left_FL[2];
+        set_value[14] = forward_FR[0];
+        set_value[15] = forward_FR[1];
+        set_value[16] = forward_FR[2];
+        set_value[17] = left_FR[0];
+        set_value[18] = left_FR[1];
+        set_value[19] = left_FR[2];
+        set_value[20] = forward_RR[0];
+        set_value[21] = forward_RR[1];
+        set_value[22] = forward_RR[2];
+        set_value[23] = left_RR[0];
+        set_value[24] = left_RR[1];
+        set_value[25] = left_RR[2];
+        set_value[26] = forward_RL[0];
+        set_value[27] = forward_RL[1];
+        set_value[28] = forward_RL[2];
+        set_value[29] = left_RL[0];
+        set_value[30] = left_RL[1];
+        set_value[31] = left_RL[2];
         try
         {
             using (Py.GIL())

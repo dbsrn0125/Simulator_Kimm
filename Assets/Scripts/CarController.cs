@@ -285,6 +285,7 @@ public class CarController : MonoBehaviour
 
     public void ResetCarPosition()
     {
+        initial_position = new Vector3(0, 0, 0);
         FMI.initialize_executed = false;
     }
 }
