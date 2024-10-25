@@ -71,6 +71,24 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Auto"",
+                    ""type"": ""Button"",
+                    ""id"": ""71320f21-a70c-4975-a9fe-c609a7d7e419"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Manual"",
+                    ""type"": ""Button"",
+                    ""id"": ""71320f21-a70c-4975-a9fe-c609a7d7e419"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -205,6 +223,50 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Steering"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""auto"",
+                    ""id"": ""dbd4f7ac-28df-4551-84de-3d0608636137"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Auto"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""auto"",
+                    ""id"": ""dbd4f7ac-28df-4551-84de-3d0608636137"",
+                    ""path"": ""<Keyboard>/#(B)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Auto"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""manual"",
+                    ""id"": ""dbd4f7ac-28df-4551-84de-3d0608636137"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Manual"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""manual"",
+                    ""id"": ""dbd4f7ac-28df-4551-84de-3d0608636137"",
+                    ""path"": ""<Keyboard>/#(N)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Manual"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -218,6 +280,8 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         m_Car_Brake = m_Car.FindAction("Brake", throwIfNotFound: true);
         m_Car_GearForward = m_Car.FindAction("GearForward", throwIfNotFound: true);
         m_Car_GearReverse = m_Car.FindAction("GearReverse", throwIfNotFound: true);
+        m_Car_Auto = m_Car.FindAction("Auto", throwIfNotFound: true);
+        m_Car_Manual = m_Car.FindAction("Manual", throwIfNotFound: true);
     }
 
     ~@CarInputActions()
@@ -289,6 +353,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Car_Brake;
     private readonly InputAction m_Car_GearForward;
     private readonly InputAction m_Car_GearReverse;
+    private readonly InputAction m_Car_Auto;
+    private readonly InputAction m_Car_Manual;
+
     public struct CarActions
     {
         private @CarInputActions m_Wrapper;
@@ -298,6 +365,9 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
         public InputAction @Brake => m_Wrapper.m_Car_Brake;
         public InputAction @GearForward => m_Wrapper.m_Car_GearForward;
         public InputAction @GearReverse => m_Wrapper.m_Car_GearReverse;
+        public InputAction @Auto => m_Wrapper.m_Car_Auto;
+        public InputAction @Manual => m_Wrapper.m_Car_Manual;
+
         public InputActionMap Get() { return m_Wrapper.m_Car; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }

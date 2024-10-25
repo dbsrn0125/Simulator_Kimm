@@ -56,8 +56,15 @@ public class InputDeviceController : MonoBehaviour
         // auto driving toggle
         if(isGamepadConnected)
         {
-        //    carInputActions.Car.Auto.ReadValue<float>();
-        //    Debug.Log("auto button");
+           if (carInputActions.Car.Auto.triggered)
+           {
+                is_auto = true;
+           }
+           else if (carInputActions.Car.Manual.triggered)
+           {
+                is_auto = false;
+           }
+           
         }
         else
         {

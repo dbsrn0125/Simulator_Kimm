@@ -39,7 +39,7 @@ public class ChartManager : MonoBehaviour
         switch (type)
         {
             case ChartDataType.Vx:
-                return "[m/s]";
+                return "[km/h]";
             case ChartDataType.Roll:
             case ChartDataType.Pitch:
             case ChartDataType.Yaw:
@@ -105,7 +105,7 @@ public class ChartManager : MonoBehaviour
         switch (chartDatatype)
         {
             case ChartDataType.Vx:
-                return (float)FMI.simulationResult[19];
+                return (float)(FMI.simulationResult[19] * 3.6);
             case ChartDataType.Roll:
                 return (float)FMI.simulationResult[5];
             case ChartDataType.Pitch:
