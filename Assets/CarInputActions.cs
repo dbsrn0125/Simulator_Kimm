@@ -81,7 +81,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Throttle"",
+                    ""action"": ""Brake"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -103,7 +103,7 @@ public partial class @CarInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Brake"",
+                    ""action"": ""Throttle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },

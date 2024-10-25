@@ -56,7 +56,8 @@ public class InputDeviceController : MonoBehaviour
         // auto driving toggle
         if(isGamepadConnected)
         {
-            // steering wheel 버튼으로 자율주행/메뉴얼 토글
+        //    carInputActions.Car.Auto.ReadValue<float>();
+        //    Debug.Log("auto button");
         }
         else
         {
