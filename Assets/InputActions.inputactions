@@ -1,5 +1,5 @@
 {
-    "name": "CarInputActions",
+    "name": "InputActions",
     "maps": [
         {
             "name": "Car",
@@ -46,6 +46,24 @@
                     "type": "Button",
                     "id": "71320f21-a70c-4975-a9fe-c609a7d7e419",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ResetCar",
+                    "type": "Button",
+                    "id": "77c0c503-a5dd-4a96-af9e-a12440c74d2e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Auto",
+                    "type": "Button",
+                    "id": "a6023eb1-532e-4d39-bcf8-b601317da431",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -183,6 +201,89 @@
                     "action": "Steering",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "b2becb37-9ded-4255-a26d-c5aa594162e5",
+                    "path": "<Keyboard>/#(R)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ResetCar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9ebb6839-8903-4d16-ab0f-9f1f6f110f40",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ResetCar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cbed7ca6-775c-4eac-aa8f-4b9e3e915699",
+                    "path": "<Keyboard>/#(B)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Auto",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8e25e31d-44bc-4c4f-a8df-617731f9b53d",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Auto",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "89bfb718-f691-40f5-bf36-7e89f778efa3",
+            "actions": [
+                {
+                    "name": "UI_Toggle",
+                    "type": "Button",
+                    "id": "b431d4b6-beb8-4ce2-8c77-d4e1ae455002",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3302f331-451e-4763-aefa-007b7472fd75",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI_Toggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "611d1382-680d-40a0-b82f-86bb80837e8a",
+                    "path": "<XInputController>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI_Toggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

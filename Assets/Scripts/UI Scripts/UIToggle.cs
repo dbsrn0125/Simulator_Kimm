@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-
+using UnityEngine.InputSystem;
 public class UIToggle : MonoBehaviour
 {
     public GameObject uiPanel; // UI 오브젝트
@@ -8,6 +8,16 @@ public class UIToggle : MonoBehaviour
     private bool isUIActive = false; // UI 활성화 상태
 
     private RectTransform uiRectTransform;
+    private void OnEnable()
+    {
+        InputManager.Instance.InputActions.UI.Enable();
+        InputManager.Instance.InputActions.UI.UI_Toggle.performed += ToggleUI;
+    }
+    private void OnDisable()
+    {
+        InputManager.Instance.InputActions.UI.Disable();
+        InputManager.Instance.InputActions.UI.UI_Toggle.performed -= ToggleUI;
+    }
 
     void Start()
     {
@@ -17,22 +27,33 @@ public class UIToggle : MonoBehaviour
         uiPanel.SetActive(true); // UI를 활성화
     }
 
-    void Update()
+    //void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Tab))
+    //    {
+    //        if (isUIActive)
+    //        {
+    //            StartCoroutine(SlideOut());
+    //        }
+    //        else
+    //        {
+    //            StartCoroutine(SlideIn());
+    //        }
+    //        isUIActive = !isUIActive;
+    //    }
+    //}
+    private void ToggleUI(InputAction.CallbackContext context)
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (isUIActive)
         {
-            if (isUIActive)
-            {
-                StartCoroutine(SlideOut());
-            }
-            else
-            {
-                StartCoroutine(SlideIn());
-            }
-            isUIActive = !isUIActive;
+            StartCoroutine(SlideOut());
         }
+        else
+        {
+            StartCoroutine(SlideIn());
+        }
+        isUIActive = !isUIActive;
     }
-
     private IEnumerator SlideIn()
     {
         float elapsedTime = 0;

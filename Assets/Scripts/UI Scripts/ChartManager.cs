@@ -85,18 +85,19 @@ public class ChartManager : MonoBehaviour
 
     void Update()
     {
-        timeSinceLastUpdate += Time.deltaTime;
+        //timeSinceLastUpdate += Time.deltaTime;
 
-        if (timeSinceLastUpdate >= updateInterval)
+        //if (timeSinceLastUpdate >= updateInterval)
+        //{
+        //    stepTime += timeSinceLastUpdate;
+        //    timeSinceLastUpdate = 0f;
+
+        //}
+        stepTime += Time.deltaTime;
+        foreach (var chart in charts)
         {
-            stepTime += timeSinceLastUpdate;
-            timeSinceLastUpdate = 0f;
-
-            foreach (var chart in charts)
-            {
-                float yValue = GetYValue(chart.chartDatatype, stepTime);
-                UpdateChartData(chart.graph, stepTime, yValue);
-            }
+            float yValue = GetYValue(chart.chartDatatype, stepTime);
+            UpdateChartData(chart.graph, stepTime, yValue);
         }
     }
 

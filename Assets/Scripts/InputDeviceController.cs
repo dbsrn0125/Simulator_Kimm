@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class InputDeviceController : MonoBehaviour
 {
-    private CarInputActions carInputActions;
+    private InputActions inputActions;
     private CarCmd_ros autoCmd;
 
     public enum Gear { Neutral, Forward, Reverse}
@@ -27,15 +27,25 @@ public class InputDeviceController : MonoBehaviour
     public float brakeSpeed = 5f; // �극��ũ ��ȭ �ӵ�
     private void Awake()
     {
-        carInputActions = new CarInputActions();
+        inputActions = InputManager.Instance.InputActions;
     }
+
     private void OnEnable()
     {
-        carInputActions.Enable();
+        inputActions.Car.Enable();
+        inputActions.Car.ResetCar.performed += ResetCar;
+        inputActions.Car.Auto.performed += ChangeDriveMode;
+        inputActions.Car.GearForward.performed += OnGearForward;
+        inputActions.Car.GearReverse.performed += OnGearReverse;
+
     }
     private void OnDisable()
     {
-        carInputActions.Disable();
+        inputActions.Car.Disable();
+        inputActions.Car.ResetCar.performed -= ResetCar;
+        inputActions.Car.Auto.performed -= ChangeDriveMode;
+        inputActions.Car.GearForward.performed -= OnGearForward;
+        inputActions.Car.GearReverse.performed -= OnGearReverse;
     }
     // Start is called before the first frame update
     void Start()
@@ -43,40 +53,36 @@ public class InputDeviceController : MonoBehaviour
         Debug.Log($"Current Gear : {currentGear}");
         autoCmd = transform.GetComponent<CarCmd_ros>();
     }
-
+    private void ResetCar(InputAction.CallbackContext context)
+    {
+        transform.GetComponent<CarController>().ResetCarPosition();
+    }
+    private void ChangeDriveMode(InputAction.CallbackContext context)
+    {
+        is_auto = !is_auto;
+    }
+    private void OnGearForward(InputAction.CallbackContext context)
+    {
+        if (currentGear != Gear.Forward)
+        {
+            currentGear = Gear.Forward;
+            gearInput = 0;
+            Debug.Log("Gear Shifted to Forward");
+        }
+    }
+    private void OnGearReverse(InputAction.CallbackContext context)
+    {
+        if (currentGear != Gear.Reverse)
+        {
+            currentGear = Gear.Reverse;
+            gearInput = 1;
+            Debug.Log("Gear Shifted to Reverse");
+        }
+    }
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            transform.GetComponent<CarController>().ResetCarPosition();
-        }
         bool isGamepadConnected = Gamepad.current!=null;
-        
-        // auto driving toggle
-        if(isGamepadConnected)
-        {
-           if (carInputActions.Car.Auto.triggered)
-           {
-                is_auto = true;
-           }
-           else if (carInputActions.Car.Manual.triggered)
-           {
-                is_auto = false;
-           }
-           
-        }
-        else
-        {
-            if (Keyboard.current.bKey.isPressed)
-            {
-                is_auto = true;
-            }
-            else if (Keyboard.current.nKey.isPressed)
-            {
-                is_auto = false;
-            }
-        }
         
         if (is_auto){
             steeringInput = autoCmd.steering_angle;
@@ -92,13 +98,12 @@ public class InputDeviceController : MonoBehaviour
                 gearInput = 1;
             }
         }
-
         else{
             if(isGamepadConnected)
             {
-                steeringInput = carInputActions.Car.Steering.ReadValue<Vector2>().x;
-                throttleInput = carInputActions.Car.Throttle.ReadValue<float>();
-                brakeInput = carInputActions.Car.Brake.ReadValue<float>();
+                steeringInput = inputActions.Car.Steering.ReadValue<Vector2>().x;
+                throttleInput = inputActions.Car.Throttle.ReadValue<float>();
+                brakeInput = inputActions.Car.Brake.ReadValue<float>();
             }
             else
             {
@@ -140,7 +145,6 @@ public class InputDeviceController : MonoBehaviour
                 throttleInput = Mathf.Lerp(throttleInput, targetThrottleInput, throttleSpeed * Time.deltaTime);
                 brakeInput = Mathf.Lerp(brakeInput, targetBrakeInput, brakeSpeed * Time.deltaTime);
 
-                // �Է� ���� ��ǥ ���� ��������� 0���� ����
                 if (Mathf.Abs(targetSteeringInput) < 0.01f && Mathf.Abs(steeringInput) < 0.01f)
                 {
                     steeringInput = 0f;
@@ -154,25 +158,21 @@ public class InputDeviceController : MonoBehaviour
                     brakeInput = 0f;
                 }
             }
-            // Gear Input: ���� �� ���� Ȯ��
-            bool isGearForward = isGamepadConnected ? carInputActions.Car.GearForward.triggered : Keyboard.current.leftShiftKey.wasPressedThisFrame;
-            bool isGearReverse = isGamepadConnected ? carInputActions.Car.GearReverse.triggered : Keyboard.current.leftCtrlKey.wasPressedThisFrame;
+            //bool isGearForward = isGamepadConnected ? inputActions.Car.GearForward.triggered : Keyboard.current.leftShiftKey.wasPressedThisFrame;
+            //bool isGearReverse = isGamepadConnected ? inputActions.Car.GearReverse.triggered : Keyboard.current.leftCtrlKey.wasPressedThisFrame;
 
-            //Debug.Log($"Steering Input: {steeringInput}");
-            //Debug.Log($"Throttle Input: {throttleInput}");
-            //Debug.Log($"Brake Input: {brakeInput}");
-            if (isGearForward && currentGear != Gear.Forward)
-            {
-                currentGear = Gear.Forward;
-                gearInput = 0;
-                Debug.Log("Gear Shifted to Forward");
-            }
-            else if (isGearReverse && currentGear != Gear.Reverse)
-            {
-                currentGear = Gear.Reverse;
-                gearInput = 1;
-                Debug.Log("Gear Shifted to Reverse");
-            }
+            //if (isGearForward && currentGear != Gear.Forward)
+            //{
+            //    currentGear = Gear.Forward;
+            //    gearInput = 0;
+            //    Debug.Log("Gear Shifted to Forward");
+            //}
+            //else if (isGearReverse && currentGear != Gear.Reverse)
+            //{
+            //    currentGear = Gear.Reverse;
+            //    gearInput = 1;
+            //    Debug.Log("Gear Shifted to Reverse");
+            //}
         }
     }
 }
