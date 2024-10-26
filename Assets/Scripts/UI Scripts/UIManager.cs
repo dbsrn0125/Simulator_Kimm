@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
-public class UIManager : MonoBehaviour
+public class UIToggle : MonoBehaviour
 {
     public GameObject uiPanel; // UI 오브젝트
     public float slideDuration = 0.5f; // 슬라이드 애니메이션 시간

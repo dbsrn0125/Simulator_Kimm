@@ -110,35 +110,35 @@ public class InputDeviceController : MonoBehaviour
                 // steering input
                 if (Keyboard.current.aKey.isPressed)
                 {
-                    targetSteeringInput = -1f; // ����
+                    targetSteeringInput = -1f;
                 }
                 else if (Keyboard.current.dKey.isPressed)
                 {
-                    targetSteeringInput = 1f; // ������
+                    targetSteeringInput = 1f;
                 }
                 else
                 {
-                    targetSteeringInput = 0f; // �߸�
+                    targetSteeringInput = 0f;
                 }
 
                 // throttle
                 if (Keyboard.current.wKey.isPressed)
                 {
-                    targetThrottleInput = 1f; // ����
+                    targetThrottleInput = 1f;
                 }
                 else
                 {
-                    targetThrottleInput = 0f; // ���� ����
+                    targetThrottleInput = 0f;
                 }
 
                 // brake
                 if (Keyboard.current.sKey.isPressed)
                 {
-                    targetBrakeInput = 1f; // �극��ũ
+                    targetBrakeInput = 1f;
                 }
                 else
                 {
-                    targetBrakeInput = 0f; // �극��ũ ����
+                    targetBrakeInput = 0f;
                 }
 
                 steeringInput = Mathf.Lerp(steeringInput, targetSteeringInput, steeringSpeed * Time.deltaTime);
