@@ -26605,7 +26605,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Vx[m/s]
+  m_text: Vx[km/h]
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -31858,7 +31858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23d2e6c53a12af542a5a177441b554f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentGear: 0
+  currentGear: 1
   steeringInput: 0
   throttleInput: 0
   brakeInput: 0

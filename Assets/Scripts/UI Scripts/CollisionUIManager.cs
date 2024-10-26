@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 
-public class CollisionUIController : MonoBehaviour
+public class CollisionUIManager : MonoBehaviour
 {
     public CanvasGroup redOverlayCanvasGroup;
     public TextMeshProUGUI collisionMessageText;

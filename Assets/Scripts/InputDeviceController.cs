@@ -9,7 +9,7 @@ public class InputDeviceController : MonoBehaviour
     private CarCmd_ros autoCmd;
 
     public enum Gear { Neutral, Forward, Reverse}
-    public Gear currentGear = Gear.Neutral;
+    public Gear currentGear = Gear.Forward;
 
     public float steeringInput =0f;
     public float throttleInput=0f;
