@@ -112,7 +112,7 @@ public class ChartManager : MonoBehaviour
             case ChartDataType.Pitch:
                 return (float)FMI.simulationResult[6];
             case ChartDataType.Yaw:
-                return (float)FMI.simulationResult[3];
+                return (float)((FMI.simulationResult[3]+360.0f)%360.0f);
             default:
                 return 0;
         }
