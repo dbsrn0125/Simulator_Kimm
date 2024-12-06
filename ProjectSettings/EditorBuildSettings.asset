@@ -20,5 +20,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Red.unity
     guid: 5413db4ad23292045b546262051d9305
+  - enabled: 1
+    path: Assets/Scenes/SpeedBump.unity
+    guid: 128c9314a683bc044ba79cad594609cf
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c5231deb5cc5fb54eb3c2b9cdde9f5d5, type: 2}
