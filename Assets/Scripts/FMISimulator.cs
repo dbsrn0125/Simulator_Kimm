@@ -53,7 +53,7 @@ public class FMISimulator : MonoBehaviour
         using (Py.GIL())
         {
             dynamic FMI_py = Py.Import("custom_input_test");
-            FMI = FMI_py.FMI_manager(Environment.CurrentDirectory + "\\Assets\\" + "\\fmu\\" + "KIMM_CAR.fmu");
+            FMI = FMI_py.FMI_manager(Environment.CurrentDirectory + "\\Assets\\"+  "\\Resources\\"+ "\\fmu\\" + "KIMM_CAR.fmu");
             FMI.simulate_init();
             vrs = FMI.get_vrs();           
         }
