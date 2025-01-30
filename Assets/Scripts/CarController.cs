@@ -69,11 +69,9 @@ public class CarController : MonoBehaviour
                          select i).ToList();
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void Update()
     {
-        sw2.Restart();
-        if(!collision)
+        if (!collision)
         {
             FMI.receiveRayInfo(rayInfo);
             transform.position = new Vector3(transform.position.x, value_z + suspension_dist, transform.position.z);
@@ -86,6 +84,12 @@ public class CarController : MonoBehaviour
         value_x_old = value_x;
         value_y_old = value_y;
         value_yaw_old = value_yaw;
+    }
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        sw2.Restart();
+        
         foreach (Transform t in WheelsTransform)
         {
             RaycastHit[] wheelHits = Physics.RaycastAll(t.position, -transform.up, wheelRadius + 10.05f, layer_mask);
