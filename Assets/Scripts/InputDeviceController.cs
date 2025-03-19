@@ -5,8 +5,13 @@ using UnityEngine.InputSystem;
 
 public class InputDeviceController : MonoBehaviour
 {
+<<<<<<< Updated upstream
     private CarInputActions carInputActions;
     private CarCmd_ros autoCmd;
+=======
+    private InputActions inputActions;
+    private CarCmdRos autoCmd;
+>>>>>>> Stashed changes
 
     public enum Gear { Neutral, Forward, Reverse}
     public Gear currentGear = Gear.Neutral;
@@ -41,7 +46,7 @@ public class InputDeviceController : MonoBehaviour
     void Start()
     {
         Debug.Log($"Current Gear : {currentGear}");
-        autoCmd = transform.GetComponent<CarCmd_ros>();
+        autoCmd = transform.GetComponent<CarCmdRos>();
     }
 
     // Update is called once per frame
