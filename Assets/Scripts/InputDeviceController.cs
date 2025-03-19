@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class InputDeviceController : MonoBehaviour
 {
     private InputActions inputActions;
-    private CarCmd_ros autoCmd;
+    private CarCmdRos autoCmd;
 
     public enum Gear { Neutral, Forward, Reverse}
     public Gear currentGear = Gear.Forward;
@@ -51,7 +51,7 @@ public class InputDeviceController : MonoBehaviour
     void Start()
     {
         Debug.Log($"Current Gear : {currentGear}");
-        autoCmd = transform.GetComponent<CarCmd_ros>();
+        autoCmd = transform.GetComponent<CarCmdRos>();
     }
     private void ResetCar(InputAction.CallbackContext context)
     {

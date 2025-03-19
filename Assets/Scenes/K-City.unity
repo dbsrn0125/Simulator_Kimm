@@ -31962,6 +31962,7 @@ GameObject:
   - component: {fileID: 4516470039555921912}
   - component: {fileID: 4516470039555921913}
   - component: {fileID: 4516470039555921914}
+  - component: {fileID: 4516470039555921915}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -32110,6 +32111,19 @@ MonoBehaviour:
   steering_angle: 0
   brake: 0
   gear: 0
+--- !u!114 &4516470039555921915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4516470039555921907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f6745e01a2ea674d9ac91b89dfb8396, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statusCmdTopic: /KIMM/status
 --- !u!23 &6387904847284818998
 MeshRenderer:
   m_ObjectHideFlags: 0
