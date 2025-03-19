@@ -5,13 +5,8 @@ using UnityEngine.InputSystem;
 
 public class InputDeviceController : MonoBehaviour
 {
-<<<<<<< Updated upstream
     private CarInputActions carInputActions;
-    private CarCmd_ros autoCmd;
-=======
-    private InputActions inputActions;
     private CarCmdRos autoCmd;
->>>>>>> Stashed changes
 
     public enum Gear { Neutral, Forward, Reverse}
     public Gear currentGear = Gear.Neutral;
