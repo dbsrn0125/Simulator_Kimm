@@ -4,16 +4,24 @@ using UnityEngine;
 
 public class TrafficLight : MonoBehaviour
 {
+    private static int nextID = 1;  // ID
+    public int id { get; private set; }
+    
+    public TrafficLightStatus status { get; private set; }
+
     Light RedLight_L;
     Light YellowLight_L;
     Light GreenLight_L;
     Light GreenLight_R;
     Light[] Lights;
 
-    float timer = 0.0f;
+    // float timer = 0.0f;
 
     void Awake()
-    {
+    {   
+        id = nextID++; // 오브젝트 생성 시 ID 할당 후 증가
+        status = TrafficLightStatus.Red;
+
         Lights = GetComponentsInChildren<Light>();
         foreach (Light i in Lights)
         {
@@ -36,50 +44,71 @@ public class TrafficLight : MonoBehaviour
         }
     }
 
-    void Update()
+    public void SetLightStatus(TrafficLightStatus _status)
     {
-        timer += Time.deltaTime;
+        status = _status;
+    }
+    // void statusUpdateSelf()
+    // {
+    //     timer += Time.deltaTime;
 
-        if (timer < 10f)
+    //     if (timer < 10f)
+    //     {
+    //         status = TrafficLightStatus.Red;
+    //     }
+
+    //     else if (timer < 13f)
+    //     {
+    //         status = TrafficLightStatus.Yellow;
+    //     }
+
+    //     else if (timer < 23f)
+    //     {
+    //        status = TrafficLightStatus.Green;
+    //     }
+    //     else if (timer < 26f)
+    //     {
+    //         status = TrafficLightStatus.Yellow;
+    //     }
+    //     else if (timer < 36f)
+    //     {
+    //         status = TrafficLightStatus.LeftGreen;
+    //     }
+    //     else
+    //     {
+    //         timer = 0.0f;
+    //     }
+    // }
+
+    void Update()
+    {   
+        // statusUpdateSelf();
+
+        // 모든 조명을 끄기
+        foreach (Light light in Lights)
         {
-            RedLight_L.enabled = false;
-            YellowLight_L.enabled = false;
-            GreenLight_L.enabled = false;
-            GreenLight_R.enabled = true;
+            if (light != null) light.enabled = false;
         }
 
-        else if (timer < 13f)
+        // 현재 상태에 맞는 조명 켜기
+        switch (status)
         {
-            RedLight_L.enabled = false;
-            YellowLight_L.enabled = true;
-            GreenLight_L.enabled = false;
-            GreenLight_R.enabled = false;
-        }
-        else if (timer < 23f)
-        {
-            RedLight_L.enabled = true;
-            YellowLight_L.enabled = false;
-            GreenLight_L.enabled = true;
-            GreenLight_R.enabled = false;
-        }
-        else if (timer < 26f)
-        {
-            RedLight_L.enabled = false;
-            YellowLight_L.enabled = true;
-            GreenLight_L.enabled = false;
-            GreenLight_R.enabled = false;
-        }
-        else if (timer < 36f)
-        {
-            RedLight_L.enabled = true;
-            YellowLight_L.enabled = false;
-            GreenLight_L.enabled = false;
-            GreenLight_R.enabled = false;
-        }
-
-        else
-        {
-            timer = 0.0f;
+            case TrafficLightStatus.Red:
+                if (RedLight_L != null) RedLight_L.enabled = true;
+                break;
+            case TrafficLightStatus.Yellow:
+                if (YellowLight_L != null) YellowLight_L.enabled = true;
+                break;
+            case TrafficLightStatus.Green:
+                if (GreenLight_L != null) GreenLight_L.enabled = true;
+                break;
+            case TrafficLightStatus.Left:
+                if (GreenLight_R != null) GreenLight_R.enabled = true;
+                break;
+            case TrafficLightStatus.LeftGreen:
+                if (GreenLight_L != null) GreenLight_L.enabled = true;
+                if (GreenLight_R != null) GreenLight_R.enabled = true;
+                break;
         }
     }
 }

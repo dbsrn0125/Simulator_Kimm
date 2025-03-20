@@ -19,13 +19,14 @@ public class CarStatusRos : MonoBehaviour
         ros.RegisterPublisher<TwistMsg>(statusCmdTopic);
 
         vehCmd = transform.GetComponent<InputDeviceController>();
+
     }
 
     
     void Update()
     {
-        // Debug.Log(vehCmd.steeringInput);
-        
+        // if (ros.HasConnectionError) return;
+            
         // Vehicle Command Publish
         TwistMsg vehCmdMsg = new TwistMsg();
         vehCmdMsg.linear.x = vehCmd.throttleInput;
