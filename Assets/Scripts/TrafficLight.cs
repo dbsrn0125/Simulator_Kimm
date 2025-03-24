@@ -44,10 +44,16 @@ public class TrafficLight : MonoBehaviour
         }
     }
 
-    public void SetLightStatus(TrafficLightStatus _status)
+    public void SetStatus(TrafficLightStatus _status)
     {
         status = _status;
     }
+
+    public TrafficLightStatus GetStatus()
+    {
+        return status;
+    }
+
     // void statusUpdateSelf()
     // {
     //     timer += Time.deltaTime;

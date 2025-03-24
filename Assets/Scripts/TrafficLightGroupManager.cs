@@ -1,104 +1,116 @@
+using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 // ROS
 using Unity.Robotics.ROSTCPConnector;
+using RosMessageTypes.Geometry;
 using RosMessageTypes.Std;
-// using RosMessageTypes.TrafficLight;
+using RosMessageTypes.BuiltinInterfaces;
+
+using Unity.Robotics.ROSTCPConnector.MessageGeneration;
+using RosMessageTypes.TrafficLight;
 
 public enum TrafficLightStatus { Red, Yellow, Green, Left, LeftGreen }
 
 public class TrafficLightGroupManager : MonoBehaviour
 {   
+    // ROS
     private ROSConnection ros;
-    public string trafficLightTopic = "KIMM/status/traffic_light";
-    private float publishInterval = 0.2f; // sec
+    public string trafficLightTopic = "/KIMM/status/traffic_light";
 
-    private List<TrafficLight> trafficLights = new List<TrafficLight>();
-    private TrafficLightStatus status;
+    public float frequency = 1.0f;
 
-    float timer = 0.0f;
+    private Stopwatch stopwatch;
+    private double PublishPeriodMilliseconds => 1000.0 / frequency;
+    private bool ShouldPublishMessage => stopwatch.ElapsedMilliseconds >= PublishPeriodMilliseconds;
+
+    // Traffic Groups
+    private List<TrafficLightGroup> trafficLightGroups = new List<TrafficLightGroup>();
 
     void Start()
     {   
+        // ROS
         ros = ROSConnection.GetOrCreateInstance();
-        // ros.RegisterPublisher<TrafficLightStatusArrayMsg>(trafficLightTopic);
+        ros.RegisterPublisher<PoseArrayMsg>(trafficLightTopic);
+        
+        // ros.RegisterPublisher<TrafficLightArrayMsg>(trafficLightTopic);
+
+
+        // Stopwatch
+        stopwatch = new Stopwatch();
+        stopwatch.Start();
 
         foreach (Transform child in transform)
         {
-            TrafficLight light = child.GetComponent<TrafficLight>();
-            if (light != null)
+            TrafficLightGroup tl_group = child.GetComponent<TrafficLightGroup>();
+            if (tl_group != null)
             {
-                trafficLights.Add(light);
+                trafficLightGroups.Add(tl_group);
             }
         }
     }
 
     void Update()
-    {
-        StatusUpdate();
+    {   
+        if (ShouldPublishMessage)
+        {
+            stopwatch.Restart();
 
-        foreach (TrafficLight light in trafficLights)
-        {
-            light.SetLightStatus(status);
-        }
-
-        PublishTrafficLightStatus();
-    }
-    
-    void StatusUpdate()
-    {
-        timer += Time.deltaTime;
-
-        if (timer < 10f)
-        {
-            status = TrafficLightStatus.Red;
-        }
-
-        else if (timer < 13f)
-        {
-            status = TrafficLightStatus.Yellow;
-        }
-
-        else if (timer < 23f)
-        {
-           status = TrafficLightStatus.Green;
-        }
-        else if (timer < 26f)
-        {
-            status = TrafficLightStatus.Yellow;
-        }
-        else if (timer < 36f)
-        {
-            status = TrafficLightStatus.LeftGreen;
-        }
-        else
-        {
-            timer = 0.0f;
+            PublishTrafficLightStatus();
         }
     }
 
-    void PublishTrafficLightStatus()
-    {
-        // TrafficLightStatusMsg[] lightStatuses = new TrafficLightStatusMsg[trafficLights.Count];
+    void PublishTrafficLightStatus() 
+    {   
+        PoseArrayMsg poseArrayMsg = new PoseArrayMsg();
+        List<PoseMsg> poseList = new List<PoseMsg>();
 
-        // for (int i = 0; i < trafficLights.Count; i++)
-        // {
-        //     lightStatuses[i] = new TrafficLightStatusMsg
-        //     {
-        //         id = trafficLights[i].id,
-        //         status = (int)trafficLights[i].status
-        //     };
-        // }
+        // TrafficLightArrayMsg msg = new TrafficLightArrayMsg();
+        // List<TrafficLightMsg> lightList = new List<TrafficLightMsg>();
 
-        // // 메시지 생성 및 ROS 퍼블리시
-        // TrafficLightStatusArrayMsg msg = new TrafficLightStatusArrayMsg
-        // {
-        //     header = new HeaderMsg { stamp = new TimeMsg(), frame_id = "map" },
-        //     lights = lightStatuses
-        // };
+        foreach (TrafficLightGroup group in trafficLightGroups)
+        {
+            foreach (TrafficLight light in group.GetTrafficLights())
+            {   
+                PoseMsg pose = new PoseMsg();
+            
+                // 기본 헤더 설정
+                // HeaderMsg header = new HeaderMsg();
+                // header.frame_id = "map"; // 필요시 "odom" 등으로 변경
+                // float time = Time.time;
+                // uint sec = (uint)Mathf.FloorToInt(time);
+                // uint nanosec = (uint)((time - sec) * 1e9f);
+
+                // header.stamp = new TimeMsg(sec, nanosec);
+                
+                // pose.header = header;
+
+                // Traffic Light ID를 position.x에, Status를 position.y에 설정
+                pose.position = new PointMsg((double)light.id, (double)light.GetStatus(), 0.0);
+
+
+                // orientation을 기본값 (회전 없음)으로 설정
+                pose.orientation = new QuaternionMsg(0, 0, 0, 1);
+
+                poseList.Add(pose);
+
+                // // UnityEngine.Debug.Log($"TrafficLight ID: {light.id}, Status: {light.GetStatus()}");
+                // TrafficLightMsg lightMsg = new TrafficLightMsg();
+                // lightMsg.id = light.id;
+                // lightMsg.status = (int)light.GetStatus();
+                // lightList.Add(lightMsg);
+            }
+        }
+
+        poseArrayMsg.poses = poseList.ToArray();
+        ros.Publish(trafficLightTopic, poseArrayMsg);
+
+        // msg.lights = lightList.ToArray();
+        // UnityEngine.Debug.Log(msg.lights[0]);
 
         // ros.Publish(trafficLightTopic, msg);
     }
+
 }
