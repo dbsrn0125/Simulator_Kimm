@@ -47,8 +47,8 @@ public class PedestrianController : MonoBehaviour
         }
 
         // 애니메이션 업데이트는 계속 수행
-        float currentSpeed = agent.velocity.magnitude;
-        animator.SetFloat(speedParameterName, currentSpeed);
+        //float currentSpeed = agent.velocity.magnitude;
+        //animator.SetFloat(speedParameterName, currentSpeed);
     }
 
     // 대기 후 다음 목표 지점으로 이동하는 코루틴

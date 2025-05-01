@@ -16,7 +16,7 @@ public class Custom_TL : MonoBehaviour
     public Material LightsOnMat;
     public Material LightsOffMat;
 
-    private bool mInitialized = false;
+    //private bool mInitialized = false;
 
     public bool redLightState = true;
 

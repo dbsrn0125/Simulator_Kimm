@@ -24,7 +24,7 @@ public class ChartManager : MonoBehaviour
     public FMISimulator FMI;
     public float timeWindow = 1f;
     private float stepTime = 0;
-    private float timeSinceLastUpdate = 0f;
+    //private float timeSinceLastUpdate = 0f;
 
     public float updateRate = 10f;
     private float updateInterval;
