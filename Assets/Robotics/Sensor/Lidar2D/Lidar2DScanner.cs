@@ -152,8 +152,14 @@ public class Lidar2DSacnner : MonoBehaviour
     static TimeMsg TimeStamp()
     {
         double t = Time.realtimeSinceStartup;
+
+        // ROS1
         uint secs = (uint)t;
         uint nsecs = (uint)((t - secs) * 1e9);
+
+        // ROS2
+        // int secs = (int)t;
+        // uint nsecs = (uint)((t - secs) * 1e9);
         return new TimeMsg(secs, nsecs);
     }
 

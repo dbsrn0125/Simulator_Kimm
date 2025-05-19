@@ -2,24 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class PhaseEntry
+{
+    public TrafficLightStatus status;
+    [Range(0f, 60f)] public float duration;
+}
+
 public class TrafficLight : MonoBehaviour
 {
-    private static int nextID = 1;  // ID
-    public int id { get; private set; }
+    // private static int nextID = 1;  // ID
+    public int ID; // { get; private set; }
     
+    [Header("Traffic Light Status Sequence")]
+    public List<PhaseEntry> statusSequence = new List<PhaseEntry>();
+    private int currentPhaseIndex = 0;
+
     public TrafficLightStatus status { get; private set; }
 
-    Light RedLight_L;
-    Light YellowLight_L;
-    Light GreenLight_L;
-    Light GreenLight_R;
+    Light RedLight;
+    Light YellowLight;
+    Light GreenLight;
+    Light LeftLight;
     Light[] Lights;
 
     // float timer = 0.0f;
 
+    public void StartCycle()
+    {
+        StopAllCoroutines();
+        StartCoroutine(CycleCoroutine());
+    }
+
+    private IEnumerator CycleCoroutine()
+    {
+        while (true)
+        {
+            var phase = statusSequence[currentPhaseIndex];
+            SetStatus(phase.status);
+            
+            yield return new WaitForSeconds(phase.duration);
+
+            currentPhaseIndex = (currentPhaseIndex + 1) % statusSequence.Count;
+        }
+    }
+
     void Awake()
     {   
-        id = nextID++; // 오브젝트 생성 시 ID 할당 후 증가
+        // ID = nextID++; // 오브젝트 생성 시 ID 할당 후 증가
         status = TrafficLightStatus.Red;
 
         Lights = GetComponentsInChildren<Light>();
@@ -27,19 +57,19 @@ public class TrafficLight : MonoBehaviour
         {
             if (i.name == "red_light")
             {
-                RedLight_L = i.GetComponent<Light>();
+                RedLight = i.GetComponent<Light>();
             }
             else if (i.name == "yellow_light")
             {
-                YellowLight_L = i.GetComponent<Light>();
+                YellowLight = i.GetComponent<Light>();
             }
             else if (i.name == "green_light")
             {
-                GreenLight_L = i.GetComponent<Light>();
+                GreenLight = i.GetComponent<Light>();
             }
             else if (i.name == "green_light_l")
             {
-                GreenLight_R = i.GetComponent<Light>();
+                LeftLight = i.GetComponent<Light>();
             }
         }
     }
@@ -47,49 +77,7 @@ public class TrafficLight : MonoBehaviour
     public void SetStatus(TrafficLightStatus _status)
     {
         status = _status;
-    }
-
-    public TrafficLightStatus GetStatus()
-    {
-        return status;
-    }
-
-    // void statusUpdateSelf()
-    // {
-    //     timer += Time.deltaTime;
-
-    //     if (timer < 10f)
-    //     {
-    //         status = TrafficLightStatus.Red;
-    //     }
-
-    //     else if (timer < 13f)
-    //     {
-    //         status = TrafficLightStatus.Yellow;
-    //     }
-
-    //     else if (timer < 23f)
-    //     {
-    //        status = TrafficLightStatus.Green;
-    //     }
-    //     else if (timer < 26f)
-    //     {
-    //         status = TrafficLightStatus.Yellow;
-    //     }
-    //     else if (timer < 36f)
-    //     {
-    //         status = TrafficLightStatus.LeftGreen;
-    //     }
-    //     else
-    //     {
-    //         timer = 0.0f;
-    //     }
-    // }
-
-    void Update()
-    {   
-        // statusUpdateSelf();
-
+        
         // 모든 조명을 끄기
         foreach (Light light in Lights)
         {
@@ -97,24 +85,37 @@ public class TrafficLight : MonoBehaviour
         }
 
         // 현재 상태에 맞는 조명 켜기
-        switch (status)
+        switch (_status)
         {
             case TrafficLightStatus.Red:
-                if (RedLight_L != null) RedLight_L.enabled = true;
+                if (RedLight != null) RedLight.enabled = true;
                 break;
             case TrafficLightStatus.Yellow:
-                if (YellowLight_L != null) YellowLight_L.enabled = true;
+                if (YellowLight != null) YellowLight.enabled = true;
                 break;
             case TrafficLightStatus.Green:
-                if (GreenLight_L != null) GreenLight_L.enabled = true;
+                if (GreenLight != null) GreenLight.enabled = true;
                 break;
             case TrafficLightStatus.Left:
-                if (GreenLight_R != null) GreenLight_R.enabled = true;
+                if (LeftLight != null) LeftLight.enabled = true;
                 break;
             case TrafficLightStatus.LeftGreen:
-                if (GreenLight_L != null) GreenLight_L.enabled = true;
-                if (GreenLight_R != null) GreenLight_R.enabled = true;
+                if (GreenLight != null) GreenLight.enabled = true;
+                if (LeftLight != null) LeftLight.enabled = true;
+                break;
+            case TrafficLightStatus.LeftRed:
+                if (GreenLight != null) RedLight.enabled = true;
+                if (LeftLight != null) LeftLight.enabled = true;
                 break;
         }
     }
+
+    public TrafficLightStatus GetStatus()
+    {
+        return status;
+    }
+
+    // void Update()
+    // {   
+    // }
 }

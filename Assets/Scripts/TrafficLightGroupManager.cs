@@ -12,7 +12,15 @@ using RosMessageTypes.BuiltinInterfaces;
 using Unity.Robotics.ROSTCPConnector.MessageGeneration;
 using RosMessageTypes.TrafficLight;
 
-public enum TrafficLightStatus { Red, Yellow, Green, Left, LeftGreen }
+public enum TrafficLightStatus
+{
+    Red,
+    Yellow,
+    Green,
+    LeftGreen,   // 좌회전 + 초록불
+    LeftRed,      // 좌회전 + 빨간불
+    Left
+}
 
 public class TrafficLightGroupManager : MonoBehaviour
 {   
@@ -88,7 +96,7 @@ public class TrafficLightGroupManager : MonoBehaviour
                 // pose.header = header;
 
                 // Traffic Light ID를 position.x에, Status를 position.y에 설정
-                pose.position = new PointMsg((double)light.id, (double)light.GetStatus(), 0.0);
+                pose.position = new PointMsg((double)light.ID, (double)light.GetStatus(), 0.0);
 
 
                 // orientation을 기본값 (회전 없음)으로 설정
