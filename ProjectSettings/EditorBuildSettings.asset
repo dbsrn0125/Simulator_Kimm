@@ -26,5 +26,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Arena.unity
     guid: 6c52ab3edfb6eb542bb15c5230ba4d09
+  - enabled: 1
+    path: Assets/Scenes/Zalazone.unity
+    guid: 330e60e6838ca304a809903cb4831994
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c5231deb5cc5fb54eb3c2b9cdde9f5d5, type: 2}
