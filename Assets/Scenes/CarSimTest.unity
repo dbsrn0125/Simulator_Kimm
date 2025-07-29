@@ -370,6 +370,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4516470040153562242, guid: 94b4f03c58d35a942a7ce397748bf94c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1881308468}
+    - targetCorrespondingSourceObject: {fileID: 4516470040153562242, guid: 94b4f03c58d35a942a7ce397748bf94c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1881308469}
   m_SourcePrefab: {fileID: 100100000, guid: 94b4f03c58d35a942a7ce397748bf94c, type: 3}
 --- !u!4 &1806467971 stripped
 Transform:
@@ -393,6 +396,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9ba96dd1bbd6d545b480e7d5241669b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  position: {x: 0, y: 0, z: 0}
+--- !u!114 &1881308469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881308467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00bf8cc6b7e9e4845b238928e061d118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carsim_FMI: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

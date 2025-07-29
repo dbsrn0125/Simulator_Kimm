@@ -8,18 +8,23 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Linq;
 
-public class CarSim : MonoBehaviour
+public class CarSimFMI : MonoBehaviour
 {
     dynamic carsim_FMI;
 
     Dictionary<string, int> vrs_input;
     int[] vrs_input_indices;
+
     Dictionary<string, int> vrs_output;
     int[] vrs_output_indices;
-    List<double> output;
+    float[] simulation_results;
+    
+    // simulation results
+    public Vector3 position;
+
     void Start()
     {
-        string fmu_path = Environment.CurrentDirectory + "\\Assets\\" + "\\Resources\\" + "\\fmu\\" + "TruckSim_0717.fmu";
+        string fmu_path = Environment.CurrentDirectory + "\\Assets\\" + "\\Resources\\" + "\\fmu\\" + "TruckSim_0718_NotSelfCon.fmu";
         float start_time = 0.0f;
         float step_size = 0.001f;
 
@@ -45,37 +50,24 @@ public class CarSim : MonoBehaviour
         UnityEngine.Debug.Log("CarSim Start Successfully");
 
         #region variables
-
-        // vrs_input_indices = new int[] { vrs_input["IMP_THROTTLE_ENGINE"],
-        //                                 vrs_input["IMP_STEER_SW"],
-        //                                 vrs_input["IMP_PCON_BK"],
-        //                                 vrs_input["IMP_GEAR"]};
-        // IMP_DZDX_L1I (Real): Input variable
-        // IMP_DZDX_L1O (Real): Input variable
-        // IMP_DZDX_L2I (Real): Input variable
-        // IMP_DZDX_L2O (Real): Input variable
-        // IMP_DZDX_R1I (Real): Input variable
-        // IMP_DZDX_R1O (Real): Input variable
-        // IMP_DZDX_R2I (Real): Input variable
-        // IMP_DZDX_R2O (Real): Input variable
-        // IMP_DZDY_L1I (Real): Input variable
-        // IMP_DZDY_L1O (Real): Input variable
-        // IMP_DZDY_L2I (Real): Input variable
-        // IMP_DZDY_L2O (Real): Input variable
-        // IMP_DZDY_R1I (Real): Input variable
-        // IMP_DZDY_R1O (Real): Input variable
-        // IMP_DZDY_R2I (Real): Input variable
-        // IMP_DZDY_R2O (Real): Input variable
         vrs_output_indices = new int[] { vrs_output["Xo"], vrs_output["Yo"], vrs_output["Zo"] };
-        
+        simulation_results = new float[vrs_output_indices.Length];
         #endregion
     }
 
-    void Update()
-    {
-    }
-
     void FixedUpdate()
+    {
+        if (carsim_FMI == null)
+        {
+            UnityEngine.Debug.LogError("CarSim FMU is not initialized.");
+            return;
+        }
+
+        Simulate();
+        UpdatePosition();
+    }
+    
+    void Simulate()
     {
         try
         {
@@ -83,7 +75,11 @@ public class CarSim : MonoBehaviour
             {
                 var output_ = carsim_FMI.simulate(vrs_output_indices);
                 UnityEngine.Debug.Log("CarSim Step Successfully");
-                UnityEngine.Debug.Log(output_);
+                
+                for (int i = 0; i < simulation_results.Length; i++)
+                {
+                    simulation_results[i] = output_[i].As<float>();
+                }
             }
         }
         catch (Exception ex)
@@ -91,26 +87,29 @@ public class CarSim : MonoBehaviour
             UnityEngine.Debug.LogError($"Error during simulation step: {ex.Message}");
         }
     }
-    
+
+    void UpdatePosition()
+    {
+        position.x = simulation_results[1];
+        position.y = simulation_results[2];
+        position.z = simulation_results[0];
+    }
+
     private async void OnDisable()
     {
         try
         {
             UnityEngine.Debug.Log("Starting FMU cleanup...");
 
-            await Task.Run(() => {
+            if (carsim_FMI != null)
+            {
                 using (Py.GIL())
                 {
-                    if (carsim_FMI == null)
-                    {
-                        return;
-                    }
-                    carsim_FMI.terminate();
+                    carsim_FMI.terminate();  // 반드시 명시적 종료
                     carsim_FMI = null;
                 }
-            });
+            }
 
-            UnityEngine.Debug.Log(carsim_FMI == null ? "FMU instance is null" : "FMU instance is not null");
             UnityEngine.Debug.Log("FMU cleanup completed.");
         }
         catch (Exception ex)

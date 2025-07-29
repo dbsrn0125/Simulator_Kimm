@@ -1,0 +1,396 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 230ae089dd87dc0478b8764182759ebb, type: 3}
+  m_Name: TruckSim_0717
+  m_EditorClassIdentifier: 
+  fmiVersion: 2.0
+  guid: 7b00300063003400650038003100300066002d0061006200630065002d0034006100300030002d0038003200370036002d003100370036006600610033006300610030003000300030007d00
+  modelName: TruckSim FMU -- FMI2.0
+  coSimulation:
+    modelIdentifier: vs_fmi2
+  modelVariables:
+  - name: IMP_STEER_SW
+    valueReference: 0
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_SPEED
+    valueReference: 1
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_PCON_BK
+    valueReference: 2
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_GEAR_TRANS
+    valueReference: 3
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_THROTTLE_ENGINE
+    valueReference: 4
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDX_L1I
+    valueReference: 5
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDX_L1O
+    valueReference: 6
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDX_L2I
+    valueReference: 7
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDX_L2O
+    valueReference: 8
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDX_R1I
+    valueReference: 9
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDX_R1O
+    valueReference: 10
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDX_R2I
+    valueReference: 11
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDX_R2O
+    valueReference: 12
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDY_L1I
+    valueReference: 13
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDY_L1O
+    valueReference: 14
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDY_L2I
+    valueReference: 15
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDY_L2O
+    valueReference: 16
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDY_R1I
+    valueReference: 17
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDY_R1O
+    valueReference: 18
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDY_R2I
+    valueReference: 19
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: IMP_DZDY_R2O
+    valueReference: 20
+    description: Input variable
+    causality: input
+    variability: 
+    initial: 
+    type: 0
+    start: 0
+  - name: Throttle
+    valueReference: 21
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Steer_SW
+    valueReference: 22
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Pbk_Con
+    valueReference: 23
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: GearStat
+    valueReference: 24
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Xo
+    valueReference: 25
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Yo
+    valueReference: 26
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Zo
+    valueReference: 27
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Vx
+    valueReference: 28
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Vy
+    valueReference: 29
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Vz
+    valueReference: 30
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Ax
+    valueReference: 31
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Ay
+    valueReference: 32
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Az
+    valueReference: 33
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Roll
+    valueReference: 34
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Pitch
+    valueReference: 35
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Yaw
+    valueReference: 36
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: AVx
+    valueReference: 37
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: AVy
+    valueReference: 38
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: AVz
+    valueReference: 39
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: AAx
+    valueReference: 40
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: AAy
+    valueReference: 41
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: AAz
+    valueReference: 42
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Z_L1
+    valueReference: 43
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Z_L2
+    valueReference: 44
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Z_R1
+    valueReference: 45
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
+  - name: Z_R2
+    valueReference: 46
+    description: Output variable
+    causality: output
+    variability: 
+    initial: 
+    type: 0
+    start: 
